@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Cloudwalker Companion</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_prime">PrimeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <string name="email_error_message">Please enter a valid email address</string>
+    <string name="phone_error_message">Please enter a valid Mobile number</string>
+    <string name="dob_error_message">Please enter a valid Dob</string>
+
+    <string name="webApplicationClientIdOld">231757569892-kj5fclgdo0i0ujlv8trp346ajpvh2i68.apps.googleusercontent.com</string>
+
+    <string name="webApplicationClientId">953591453580-akkftfbqcv35qc1jf3s11pj7n4dfa405.apps.googleusercontent.com</string>
+
+    <string name="googleClientSecret">fa7OmaV8hHEPgbjR2N83FeZX</string>
+
+    <string-array name="genre">
+        <item></item>
+    </string-array>
+</resources>
