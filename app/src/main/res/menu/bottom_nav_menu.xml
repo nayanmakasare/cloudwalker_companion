@@ -16,4 +16,9 @@
         android:icon="@drawable/ic_movie_black_24dp"
         android:title="Movie Box" />
 
+    <item
+        android:id="@+id/navigation_youtube"
+        android:icon="@drawable/ic_movie_black_24dp"
+        android:title="Youtube" />
+
 </menu>

@@ -15,4 +15,7 @@
     <color name="primaryTextColor">#BFBFBF</color>
     <color name="primaryBackgroundColor">#141414</color>
     <color name="transparentColor">#36141414</color>
+    <color name="Grey">#c3c3c3 </color>
+    <color name="White">#fff</color>
+    <color name="lightGrey">#f2f2f2 </color>
 </resources>

@@ -44,8 +44,6 @@ dependencies {
     // Http Logging Interceptor
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 
-    implementation files('libs/radial-menu-v1.jar')
-
     implementation 'com.github.bumptech.glide:glide:3.7.0'
 
     //validation
@@ -54,15 +52,18 @@ dependencies {
     //circleImageView
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
-    //googleSignIn
+    // Room components
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+
+
+    //youtube
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'pub.devrel:easypermissions:0.3.0'
     implementation('com.google.api-client:google-api-client-android:1.25.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-
-    // Room components
-    implementation 'android.arch.persistence.room:runtime:1.1.1'
-    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    implementation('com.google.apis:google-api-services-youtube:v3-rev211-1.25.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
 }
-
