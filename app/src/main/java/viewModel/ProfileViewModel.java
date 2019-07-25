@@ -52,7 +52,7 @@ public class ProfileViewModel extends AndroidViewModel implements LifecycleObser
             builder.addInterceptor(logging);
 
             new Retrofit.Builder()
-                    .baseUrl("http://192.168.1.222:5080/")
+                    .baseUrl("http://192.168.1.143:5081/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(builder.build())
                     .build()
@@ -99,7 +99,7 @@ public class ProfileViewModel extends AndroidViewModel implements LifecycleObser
             builder.addInterceptor(logging);
 
             new Retrofit.Builder()
-                    .baseUrl("http://192.168.1.222:5080/")
+                    .baseUrl("http://192.168.1.143:5081/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(builder.build())
                     .build().create(MyProfileInterface.class)

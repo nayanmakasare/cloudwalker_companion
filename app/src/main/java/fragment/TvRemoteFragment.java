@@ -24,10 +24,10 @@ public class TvRemoteFragment extends Fragment
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return  inflater.inflate(R.layout.fragment_remote_layout, container, false);
     }
+
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class TvRemoteFragment extends Fragment
             public void onChanged(@Nullable Boolean aBoolean) {
                 Log.d(TAG, "onChanged: message send status "+aBoolean);
                 if(aBoolean != null && !aBoolean) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Device Disconnected. Please try to reconnect again.", Toast.LENGTH_SHORT).show();
                     ((MainActivity)getActivity()).bottomNavigationView.setSelectedItemId(R.id.navigation_home);
                 }
             }

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -20,8 +19,7 @@ import appUtils.CustomAdapter;
 import databinding.IProfile;
 import model.NewUserProfile;
 import model.ProfileInfoList;
-import repository.TvLinkedDeviceRepository;
-import room.TvInfo;
+import model.TvInfo;
 import tv.cloudwalker.cwnxt.cloudwalkercompanion.databinding.ActivityProfileBinding;
 import viewModel.ProfileViewModel;
 
@@ -71,14 +69,11 @@ public class ProfileActivity extends AppCompatActivity implements IProfile {
             }
         });
 
-
         profileViewModel.getDeleteProfileResult().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
                 if(aBoolean != null) {
                     if(aBoolean) {
-                        TvLinkedDeviceRepository tvLinkedDeviceRepository = new TvLinkedDeviceRepository(ProfileActivity.this);
-                        tvLinkedDeviceRepository.deleteAllDevice();
                         Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                 | Intent.FLAG_ACTIVITY_CLEAR_TOP

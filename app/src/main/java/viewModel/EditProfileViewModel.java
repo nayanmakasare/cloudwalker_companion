@@ -40,7 +40,7 @@ public class EditProfileViewModel extends AndroidViewModel
             Log.d(TAG, "getResultFromOtp: Bingo");
 
             new Retrofit.Builder()
-                    .baseUrl("http://192.168.1.222:5080/")
+                    .baseUrl("http://192.168.1.143:5081/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build().create(MyProfileInterface.class)
                     .modifyUserProfile(userProfile, preferenceManager.getGoogleId())

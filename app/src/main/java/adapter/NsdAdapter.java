@@ -28,7 +28,8 @@ public class NsdAdapter extends ListAdapter<NsdServiceInfo, NsdAdapter.NsdViewHo
     private static  final DiffUtil.ItemCallback<NsdServiceInfo> DIFF_CALLBACK = new DiffUtil.ItemCallback<NsdServiceInfo>() {
         @Override
         public boolean areItemsTheSame(@NonNull NsdServiceInfo nsdServiceInfo, @NonNull NsdServiceInfo t1) {
-            if(nsdServiceInfo.getServiceName().equalsIgnoreCase(t1.getServiceName())){
+            if(nsdServiceInfo.getServiceName().equalsIgnoreCase(t1.getServiceName()) &&
+            nsdServiceInfo.getServiceType().equalsIgnoreCase(t1.getServiceName())){
                 return true;
             }else {
                 return false;
@@ -37,7 +38,8 @@ public class NsdAdapter extends ListAdapter<NsdServiceInfo, NsdAdapter.NsdViewHo
 
         @Override
         public boolean areContentsTheSame(@NonNull NsdServiceInfo nsdServiceInfo, @NonNull NsdServiceInfo t1) {
-            if(nsdServiceInfo.getServiceName().equalsIgnoreCase(t1.getServiceName())){
+            if(nsdServiceInfo.getServiceName().equalsIgnoreCase(t1.getServiceName()) &&
+                    nsdServiceInfo.getServiceType().equalsIgnoreCase(t1.getServiceName())){
                 return true;
             }else {
                 return false;

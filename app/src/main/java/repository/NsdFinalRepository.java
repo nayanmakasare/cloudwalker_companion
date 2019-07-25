@@ -18,6 +18,7 @@ import java.util.List;
 
 import api.MyProfileInterface;
 import appUtils.PreferenceManager;
+import model.TvInfo;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -25,7 +26,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import room.TvInfo;
 import utils.NetworkUtils;
 
 public class NsdFinalRepository
@@ -38,6 +38,12 @@ public class NsdFinalRepository
     private List<TvInfo> linkedTvInfoList ;
     private MutableLiveData<List<NsdServiceInfo>> liveNsdDeviceList = new MutableLiveData<>();
     private MutableLiveData<NsdServiceInfo> nsdResolveStatus = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getNsdDiscoveryStatus() {
+        return nsdDiscoveryStatus;
+    }
+
+    private MutableLiveData<Boolean> nsdDiscoveryStatus = new MutableLiveData<>();
     private String mHostFound;
     private int mPortFound;
     private Context context;
@@ -56,66 +62,83 @@ public class NsdFinalRepository
     public NsdFinalRepository(Context context) {
         this.preferenceManager = new PreferenceManager(context);
         mNsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
-        mNsdManager.discoverServices("_http._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
         this.context = context;
         getAllLinkedDevices();
+    }
+
+    public void stopNsdDiscovery(){
+        mNsdManager.stopServiceDiscovery(mDiscoveryListener);
+    }
+
+    public void startNsdDiscovery(){
+        mNsdManager.discoverServices("_http._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
+    }
+
+
+    public void settingNsdDiscovery() {
+        Log.d(TAG, "settingNsdDiscovery: ");
+        startNsdDiscovery();
     }
 
     public void setLinkedTvInfoList(List<TvInfo> tvInfos){
         linkedTvInfoList = tvInfos;
     }
 
+
     private NsdManager.DiscoveryListener mDiscoveryListener = new NsdManager.DiscoveryListener() {
-        @Override
-        public void onStartDiscoveryFailed(String serviceType, int errorCode) {
-            Log.d(TAG, "onStartDiscoveryFailed: ");
-            mNsdManager.stopServiceDiscovery(this);
-        }
+    @Override
+    public void onStartDiscoveryFailed(String serviceType, int errorCode) {
+        Log.d(TAG, "onStartDiscoveryFailed: "+ errorCode);
+        nsdDiscoveryStatus.postValue(false);
 
-        @Override
-        public void onStopDiscoveryFailed(String serviceType, int errorCode) {
-            Log.d(TAG, "onStopDiscoveryFailed: ");
-            mNsdManager.stopServiceDiscovery(this);
-        }
+    }
 
-        @Override
-        public void onDiscoveryStarted(String serviceType) {
-            Log.d(TAG, "onDiscoveryStarted: ");
-        }
+    @Override
+    public void onStopDiscoveryFailed(String serviceType, int errorCode) {
+        Log.d(TAG, "onStopDiscoveryFailed: ");
+    }
 
-        @Override
-        public void onDiscoveryStopped(String serviceType) {
-            Log.d(TAG, "onDiscoveryStopped: ");
-        }
+    @Override
+    public void onDiscoveryStarted(String serviceType) {
+        Log.d(TAG, "onDiscoveryStarted: ");
+        nsdDiscoveryStatus.postValue(true);
+    }
 
-        @Override
-        public void onServiceFound(NsdServiceInfo serviceInfo) {
-            Log.d(TAG, "onServiceFound: " + serviceInfo.getServiceName());
-            nsdServiceInfos.add(serviceInfo);
-            liveNsdDeviceList.postValue(nsdServiceInfos);
-            if(linkedTvInfoList != null && linkedTvInfoList.size() > 0){
-                for(TvInfo tvInfo : linkedTvInfoList) {
-                    if(serviceInfo.getServiceName().contains(tvInfo.getEmac())) {
-                        Log.d(TAG, "onServiceFound: linked device Found ");
-                        resolveNsdService(serviceInfo, true);
-                        nsdResolveStatus.postValue(serviceInfo);
-                        break;
-                    }
-                }
-            }
-        }
+    @Override
+    public void onDiscoveryStopped(String serviceType) {
+        Log.d(TAG, "onDiscoveryStopped: ");
+    }
 
-        @Override
-        public void onServiceLost(NsdServiceInfo serviceInfo) {
-            for (int i = 0; i < nsdServiceInfos.size(); i++) {
-                if (nsdServiceInfos.get(i).getServiceName().equals(serviceInfo.getServiceName())) {
-                    nsdServiceInfos.remove(i);
+    @Override
+    public void onServiceFound(NsdServiceInfo serviceInfo) {
+        Log.d(TAG, "onServiceFound: " + serviceInfo.getServiceName());
+        nsdServiceInfos.add(serviceInfo);
+        liveNsdDeviceList.postValue(nsdServiceInfos);
+        if(linkedTvInfoList != null && linkedTvInfoList.size() > 0){
+            for(TvInfo tvInfo : linkedTvInfoList) {
+                if(serviceInfo.getServiceName().contains(tvInfo.getEmac())) {
+                    Log.d(TAG, "onServiceFound: linked device Found ");
+                    resolveNsdService(serviceInfo, true);
+                    nsdResolveStatus.postValue(serviceInfo);
                     break;
                 }
             }
-            liveNsdDeviceList.postValue(nsdServiceInfos);
         }
-    };
+    }
+
+    @Override
+    public void onServiceLost(NsdServiceInfo serviceInfo) {
+        for (int i = 0; i < nsdServiceInfos.size(); i++) {
+            if (nsdServiceInfos.get(i).getServiceName().equals(serviceInfo.getServiceName())) {
+                nsdServiceInfos.remove(i);
+                break;
+            }
+        }
+        liveNsdDeviceList.postValue(nsdServiceInfos);
+    }
+ };
+
+
 
     private boolean isDeviceLinked(String tvEmac) {
         if(linkedTvInfoList != null && linkedTvInfoList.size() > 0){
@@ -142,6 +165,7 @@ public class NsdFinalRepository
                 nsdResolveStatus.postValue(serviceInfo);
                 setHostAndPortValues(serviceInfo);
                 if(!linkedStatus && !isDeviceLinked(serviceInfo.getServiceName())) {
+                    Log.d(TAG, "onServiceResolved: device not linked");
                     sayHello("sendTvInfo");
                 }
             }
@@ -165,7 +189,7 @@ public class NsdFinalRepository
             builder.addInterceptor(logging);
 
             new Retrofit.Builder()
-                    .baseUrl("http://192.168.1.222:5080/")
+                    .baseUrl("http://192.168.1.143:5081/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
                     .create(MyProfileInterface.class)
@@ -173,6 +197,7 @@ public class NsdFinalRepository
                     .enqueue(new Callback<List<TvInfo>>() {
                         @Override
                         public void onResponse(Call<List<TvInfo>> call, Response<List<TvInfo>> response) {
+                            Log.d(TAG, "onResponse: linked device call "+response.code()+" "+response.body().size());
                             if(response.code() == 200 && response.body().size() > 0) {
                                 linkedTvInfoList = response.body();
                             }
@@ -250,23 +275,37 @@ public class NsdFinalRepository
 
     private void registerDevice(String infoString) {
         Log.d(TAG, "registerDevice: " + infoString);
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.addInterceptor(logging);
+
         final String[] contentPices = infoString.split("~");
         final TvInfo tvInfo = new TvInfo(contentPices[4],contentPices[1], contentPices[2] );
         if (NetworkUtils.getConnectivityStatus(context) > 0)
         {
+            Log.d(TAG, "registerDevice: google id "+preferenceManager.getGoogleId());
             new Retrofit.Builder()
-                    .baseUrl("http://192.168.1.222:5080/")
+                    .baseUrl("http://192.168.1.143:5081/")
                     .addConverterFactory(GsonConverterFactory.create())
-                    .build().create(MyProfileInterface.class)
+                    .client(builder.build())
+                    .build()
+                    .create(MyProfileInterface.class)
                     .postNewTvDevice(tvInfo, preferenceManager.getGoogleId())
                     .enqueue(new Callback<TvInfo>() {
                         @Override
                         public void onResponse(Call<TvInfo> call, Response<TvInfo> response) {
                             Log.d(TAG, "onResponse: " + response.code());
                             if (response.code() == 200) {
-                                TvLinkedDeviceRepository tvLinkedDeviceRepository = new TvLinkedDeviceRepository(context);
-                                tvLinkedDeviceRepository.insert(tvInfo);
                                 sayHello("showProfile");
+                            }
+                            else {
+                                try {
+                                    Log.d(TAG, "onResponse: error body "+response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
 

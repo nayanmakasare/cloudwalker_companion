@@ -7,16 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import adapter.LinkedDevicesAdapter;
 import appUtils.PreferenceManager;
-import room.TvInfo;
-import viewModel.LinkedDeviceViewModel;
+import model.TvInfo;
 import viewModel.TvLinkedDeviceViewModel;
 
 public class LinkedDeviceActivity extends AppCompatActivity {

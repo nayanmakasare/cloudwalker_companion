@@ -38,9 +38,9 @@ dependencies {
     implementation 'android.arch.lifecycle:extensions:1.1.1'
 
 
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     // Http Logging Interceptor
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 
@@ -52,18 +52,12 @@ dependencies {
     //circleImageView
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
-    // Room components
-    implementation 'android.arch.persistence.room:runtime:1.1.1'
-    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
 
 
-    //youtube
+    //Google Signin
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'pub.devrel:easypermissions:0.3.0'
     implementation('com.google.api-client:google-api-client-android:1.25.0') {
-        exclude group: 'org.apache.httpcomponents'
-    }
-    implementation('com.google.apis:google-api-services-youtube:v3-rev211-1.25.0') {
         exclude group: 'org.apache.httpcomponents'
     }
 }

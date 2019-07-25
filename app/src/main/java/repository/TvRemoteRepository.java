@@ -78,7 +78,9 @@ public class TvRemoteRepository
                         }
                         os.close();
                         is.close();
-                    } catch (IOException e) {e.printStackTrace();}
+                    } catch (IOException e) {
+                        nsdMessageSentStatus.postValue(false);
+                        e.printStackTrace();}
                 }
             }).start();
         }

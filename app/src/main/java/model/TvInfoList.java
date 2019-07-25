@@ -5,8 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import room.TvInfo;
-
 public class TvInfoList {
 
     @SerializedName("googleId")

@@ -4,5 +4,7 @@
         <domain includeSubdomains="true">192.168.1.222</domain>
         <domain includeSubdomains="true">192.168.1.143</domain>
         <domain includeSubdomains="true">192.168.1.245</domain>
+        <domain includeSubdomains="true">tvapi.cloudwalker.tv</domain>
+        <domain includeSubdomains="true">static.cloudwalker.tv</domain>
     </domain-config>
 </network-security-config>

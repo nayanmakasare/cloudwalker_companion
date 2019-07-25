@@ -27,19 +27,9 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/profile"
+        android:src="@drawable/cw_icon"
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/profile_image"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:text="Edit Photo"
-        android:textColor="@android:color/holo_blue_light" />
-
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"

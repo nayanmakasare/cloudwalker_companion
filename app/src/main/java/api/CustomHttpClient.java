@@ -23,6 +23,8 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
+import tv.cloudwalker.cwnxt.cloudwalkercompanion.BuildConfig;
 
 /**
  * Created by cognoscis on 8/3/18.
@@ -71,15 +73,24 @@ public class CustomHttpClient {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Request original = chain.request();
-
                     Request request = original.newBuilder()
                             .header("emac", "70:2E:D9:55:44:1A")
+                            .header("mboard", "CWT32SHX214")
+                            .header("panel", "PT320AT01-1")
+                            .header("model", "TP.MT5510I.PB805")
                             .method(original.method(), original.body())
                             .build();
 
                     return chain.proceed(request);
                 }
             });
+
+
+//            if (BuildConfig.DEBUG) {
+//                HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+//                logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//                builder.addInterceptor(logging);
+//            }
 
             return builder.build();
 
@@ -125,12 +136,22 @@ public class CustomHttpClient {
 
                     Request request = original.newBuilder()
                             .header("emac", "70:2E:D9:55:44:1A")
+                            .header("mboard", "CWT32SHX214")
+                            .header("panel", "PT320AT01-1")
+                            .header("model", "TP.MT5510I.PB805")
                             .method(original.method(), original.body())
                             .build();
 
                     return chain.proceed(request);
                 }
             });
+
+
+//            if (BuildConfig.DEBUG) {
+//                HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+//                logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//                builder.addInterceptor(logging);
+//            }
 
             return builder.build();
 

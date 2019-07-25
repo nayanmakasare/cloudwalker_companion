@@ -13,6 +13,7 @@ import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+import api.CustomHttpClient;
 import api.MyProfileInterface;
 import model.MovieResponse;
 import model.MovieRow;
@@ -41,11 +42,14 @@ public class MovieBoxRepository
 
     private void populateData(Context context) {
 
-        new Retrofit.Builder().baseUrl("http://192.168.1.143:9876/")
+      new Retrofit.Builder()
+                .baseUrl("http://tvapi.cloudwalker.tv/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(CustomHttpClient.getHttpClient(context,"http://tvapi.cloudwalker.tv/"))
                 .build()
                 .create(MyProfileInterface.class)
-                .getHomeScreenData().enqueue(new Callback<MovieResponse>() {
+              .getHomeScreenData()
+              .enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                 Log.d(TAG, "onResponse: " + response.code());

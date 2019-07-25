@@ -3,39 +3,49 @@ package tv.cloudwalker.cwnxt.cloudwalkercompanion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import api.MyProfileInterface;
 import appUtils.PreferenceManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import model.NewUserProfile;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class IntermideateActivity extends AppCompatActivity
 {
+    private static final String TAG = "IntermideateActivity";
+    private PreferenceManager preferenceManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intermideate);
+        preferenceManager = new PreferenceManager(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        PreferenceManager preferenceManager = new PreferenceManager(IntermideateActivity.this);
         if(preferenceManager.isGoogleSignIn() && preferenceManager.isCloudwalkerSigIn()){
             startActivity(new Intent(IntermideateActivity.this, MainActivity.class));
             onBackPressed();
         }
         else if(preferenceManager.isGoogleSignIn() && !preferenceManager.isCloudwalkerSigIn()) {
             NewUserProfile newUserProfile = getIntent().getParcelableExtra(NewUserProfile.class.getSimpleName());
-            Intent prefrenceIntent = new Intent(IntermideateActivity.this, CloudwalkerPreferenceActivity.class);
-            prefrenceIntent.putExtra(NewUserProfile.class.getSimpleName(), newUserProfile);
-            startActivity(prefrenceIntent);
-            onBackPressed();
+            Log.d(TAG, "onStart: "+newUserProfile);
+            checkIfUserAlreadyPresent(newUserProfile);
         }else {
             ((EditText)findViewById(R.id.fullname)).setText(preferenceManager.getUserName());
             ((EditText)findViewById(R.id.useremail)).setText(preferenceManager.getUserEmail());
@@ -47,6 +57,45 @@ public class IntermideateActivity extends AppCompatActivity
     public void createPreference(View view) {
         startActivity(new Intent(view.getContext(), CloudwalkerPreferenceActivity.class));
         onBackPressed();
+    }
+
+    public void checkIfUserAlreadyPresent(final NewUserProfile newUserProfile)
+    {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.addInterceptor(logging);
+
+        new Retrofit.Builder()
+                .baseUrl("http://192.168.1.143:5081/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(builder.build())
+                .build()
+                .create(MyProfileInterface.class)
+                .getUserProfile(newUserProfile.getCwId())
+                .enqueue(new Callback<NewUserProfile>() {
+                    @Override
+                    public void onResponse(Call<NewUserProfile> call, Response<NewUserProfile> response) {
+                        if(response.code() == 200) {
+                            preferenceManager.setIsCloudwalkerSignIn(true);
+                            Intent intent = new Intent(IntermideateActivity.this, MainActivity.class);
+                            intent.putExtra(NewUserProfile.class.getSimpleName(), response.body());
+                            startActivity(intent);
+                            onBackPressed();
+                        }
+                        else {
+                            Intent prefrenceIntent = new Intent(IntermideateActivity.this, CloudwalkerPreferenceActivity.class);
+                            prefrenceIntent.putExtra(NewUserProfile.class.getSimpleName(), newUserProfile);
+                            startActivity(prefrenceIntent);
+                            onBackPressed();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<NewUserProfile> call, Throwable t) {
+
+                    }
+                });
     }
 }
 

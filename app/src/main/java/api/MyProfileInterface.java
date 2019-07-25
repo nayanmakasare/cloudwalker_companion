@@ -5,6 +5,8 @@ import java.util.List;
 import model.MovieResponse;
 import model.NewUserProfile;
 import model.OAuthToken;
+import model.Search;
+import model.SearchResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -17,7 +19,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import room.TvInfo;
+import model.TvInfo;
 
 public interface MyProfileInterface {
 
@@ -51,7 +53,7 @@ public interface MyProfileInterface {
     Call<ResponseBody> deleteProfile(@Path("googleId") String googleId);
 
     @Headers({"Accept-Version: 1.0.0"})
-    @GET("cats.json")
+    @GET("cats")
     Call<MovieResponse> getHomeScreenData();
 
 
@@ -74,6 +76,10 @@ public interface MyProfileInterface {
             @Field("client_id")String client_id,
 //            @Field("client_secret")String client_secret, //Is not relevant for Android application
             @Field("grant_type")String grant_type);
+
+    @Headers({"Accept-Version: 1.0.0"})
+    @POST("search")
+    Call<SearchResponse> getSearchResponse(@Body Search search);
 
 }
 

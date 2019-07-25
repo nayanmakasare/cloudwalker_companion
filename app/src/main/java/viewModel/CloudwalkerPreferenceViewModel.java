@@ -49,7 +49,7 @@ public class CloudwalkerPreferenceViewModel extends AndroidViewModel
 
 
 
-    public void createNewProfile(NewUserProfile userProfile, boolean isOtpVerified , Context context) {
+    public void createNewProfile(final NewUserProfile userProfile, boolean isOtpVerified , Context context) {
         if (isOtpVerified && NetworkUtils.getConnectivityStatus(context) > 0) {
             Log.d(TAG, "getResultFromOtp: Bingo");
 
@@ -66,14 +66,12 @@ public class CloudwalkerPreferenceViewModel extends AndroidViewModel
             preferenceManager.setType(TextUtils.join(",", userProfile.getContentType()));
             preferenceManager.setDob(userProfile.getDob());
 
-
-
             Log.d(TAG, "getResultFromOtp: genere "+userProfile.getGenre());
             Log.d(TAG, "getResultFromOtp: lang "+userProfile.getLaunguage());
             Log.d(TAG, "getResultFromOtp: content "+userProfile.getContentType());
 
             new Retrofit.Builder()
-                    .baseUrl("http://192.168.1.222:5080/")
+                    .baseUrl("http://192.168.1.143:5081/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(builder.build())
                     .build()

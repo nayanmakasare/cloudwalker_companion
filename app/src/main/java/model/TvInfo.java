@@ -1,7 +1,5 @@
-package room;
+package model;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,7 +7,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-@Entity(tableName = "tvInfo_table")
 public class TvInfo  implements Parcelable {
 
     public static final Creator<TvInfo> CREATOR = new Creator<TvInfo>() {
@@ -24,7 +21,6 @@ public class TvInfo  implements Parcelable {
         }
     };
 
-    @PrimaryKey(autoGenerate = true)
     private Integer _id;
     @SerializedName("emac")
     @Expose

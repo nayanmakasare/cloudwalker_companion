@@ -14,7 +14,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import room.TvInfo;
+import model.TvInfo;
 
 public class LinkedDeviceRepository
 {
@@ -41,7 +41,7 @@ public class LinkedDeviceRepository
 
 
         new Retrofit.Builder()
-                .baseUrl("http://192.168.1.222:5080/")
+                .baseUrl("http://192.168.1.143:5081/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(MyProfileInterface.class)
                 .getLinkDevices(mPreferenceManager.getGoogleId())
@@ -83,7 +83,7 @@ public class LinkedDeviceRepository
         Log.d(TAG, "removedLinkedDevice: "+mPreferenceManager.getGoogleId()+" "+tvInfo.getEmac());
 
         new Retrofit.Builder()
-                .baseUrl("http://192.168.1.222:5080/")
+                .baseUrl("http://192.168.1.143:5081/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(MyProfileInterface.class)
                 .removeTvDevice(tvInfo, mPreferenceManager.getGoogleId(), tvInfo.getEmac())

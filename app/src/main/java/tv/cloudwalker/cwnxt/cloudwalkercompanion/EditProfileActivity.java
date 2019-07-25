@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import model.NewUserProfile;
-import room.TvInfo;
+import model.TvInfo;
 import tv.cloudwalker.cwnxt.cloudwalkercompanion.databinding.ActivityEditProfileBinding;
 import utils.AppUtils;
 import viewModel.EditProfileViewModel;

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import room.TvInfo;
+import model.TvInfo;
 import tv.cloudwalker.cwnxt.cloudwalkercompanion.R;
 
 public class LinkedDevicesAdapter extends ListAdapter<TvInfo, LinkedDevicesAdapter.LinkedDeviceViewHolder>

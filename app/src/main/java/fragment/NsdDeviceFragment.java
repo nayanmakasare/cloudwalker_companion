@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,72 +77,19 @@ public class NsdDeviceFragment extends Fragment
                 nsdViewModel.resolverNsdServiceFromRepository(nsdServiceInfo);
             }
         });
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: nsd frag ");
+        nsdViewModel.startDiscovery();
+    }
 
-
-
-
-
-
-
-
-
-
-
-//        //viewModel
-//        nsdViewModel = ViewModelProviders.of(this).get(NsdViewModel.class);
-//        getLifecycle().addObserver(nsdViewModel);
-//
-//
-//
-//        nsdViewModel.getFoundNsdServiceFromRepository().observe(this, new Observer<NsdServiceInfo>() {
-//            @Override
-//            public void onChanged(@Nullable NsdServiceInfo nsdServiceInfo) {
-//                //found service but not contain in list
-//                if(nsdServiceInfo != null && !foundNsdServices.contains(nsdServiceInfo)){
-//                    foundNsdServices.add(nsdServiceInfo);
-//                    nsdAdapter.submitList(foundNsdServices);
-//                }
-//            }
-//        });
-//
-//        nsdViewModel.getLostNsdServiceFromRepository().observe(this, new Observer<NsdServiceInfo>() {
-//            @Override
-//            public void onChanged(@Nullable NsdServiceInfo nsdServiceInfo) {
-//                if(nsdServiceInfo != null && foundNsdServices.contains(nsdServiceInfo)){
-//                    nsdAdapter.submitList(foundNsdServices);
-//                }
-//            }
-//        });
-//
-//        nsdViewModel.getResolvedNsdServiceFromRepository().observe(this, new Observer<NsdServiceInfo>() {
-//            @Override
-//            public void onChanged(@Nullable NsdServiceInfo nsdServiceInfo) {
-//                if(nsdServiceInfo != null){
-//                    ((PrimeActivity)getActivity()).setResolvedNsdServiceInfo(nsdServiceInfo);
-//                }
-//            }
-//        });
-//
-//        nsdViewModel.getResolveNsdServiceStatus().observe(this, new Observer<Boolean>() {
-//            @Override
-//            public void onChanged(@Nullable Boolean aBoolean) {
-//                if(aBoolean != null) {
-//                    if(aBoolean){
-//                        ((PrimeActivity)getActivity()).getNavigation().setSelectedItemId(R.id.navigation_dashboard);
-//                    }
-//                }
-//            }
-//        });
-//
-//        if(newUserProfile != null && newUserProfile.getLinkedDevices().size() > 0){
-//            nsdViewModel.setLinkedDevicesToProfile(newUserProfile.getLinkedDevices());
-//        }
-//
-
-
-
-
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: nsd frag ");
+        nsdViewModel.stopDiscovery();
     }
 }

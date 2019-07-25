@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 //    public static final String BASE_URL = "https://tvapi.cloudwalker.tv/";
-    public static final String BASE_URL = "https://192.168.1.222:5080/";
+    public static final String BASE_URL = "https://192.168.1.222:5081/";
     private static Retrofit retrofit = null;
 
 

@@ -26,8 +26,8 @@
 
     <string name="webApplicationClientIdOld">231757569892-kj5fclgdo0i0ujlv8trp346ajpvh2i68.apps.googleusercontent.com</string>
 
-    <string name="webApplicationClientId">683207662160-2mgl5vptugjhco0gi6of63cor03lo8ed.apps.googleusercontent.com</string>
-
+    <string name="androidClientId">683207662160-2mgl5vptugjhco0gi6of63cor03lo8ed.apps.googleusercontent.com</string>
+    <string name="webApplicationClientId">683207662160-matoanp8p1jc0kfvgcr42hkdlde32v5f.apps.googleusercontent.com</string>
     <string name="googleClientSecret">fa7OmaV8hHEPgbjR2N83FeZX</string>
 
     <string name="loginactivity_grantsfails_quit">Ok, the application can not work if you don\'t give us the grants to access to your GDrive. Sorry we quit.</string>

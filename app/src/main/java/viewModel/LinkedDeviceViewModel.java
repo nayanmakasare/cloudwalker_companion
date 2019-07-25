@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import room.TvInfo;
+import model.TvInfo;
 import repository.LinkedDeviceRepository;
 
 public class LinkedDeviceViewModel extends AndroidViewModel
