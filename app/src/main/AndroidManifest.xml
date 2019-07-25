@@ -6,8 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -18,6 +18,17 @@
         android:roundIcon="@drawable/cwlogo_black"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".CwGoogleActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".CwPreferenceActivity" />
+        <activity android:name=".CwIntermideateActivity">
+        </activity>
         <activity
             android:name=".EditProfileActivity"
             android:parentActivityName=".ProfileActivity" />
@@ -26,20 +37,13 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SignInActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".IntermideateActivity"/>
+            android:label="@string/app_name" />
+        <activity android:name=".IntermideateActivity" />
         <activity android:name=".CloudwalkerPreferenceActivity" />
-        <activity android:name=".ProfileActivity"/>
+        <activity android:name=".ProfileActivity" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name" />
     </application>
 
 </manifest>

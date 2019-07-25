@@ -17,5 +17,8 @@
     <color name="transparentColor">#36141414</color>
     <color name="Grey">#c3c3c3 </color>
     <color name="White">#fff</color>
-    <color name="lightGrey">#f2f2f2 </color>
+    <color name="lightGrey">#80202020</color>
+
+    <color name="mainBg">#141414</color>
+    <color name="profileString">#d8d8d8</color>
 </resources>

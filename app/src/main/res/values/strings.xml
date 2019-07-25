@@ -31,6 +31,10 @@
     <string name="googleClientSecret">fa7OmaV8hHEPgbjR2N83FeZX</string>
 
     <string name="loginactivity_grantsfails_quit">Ok, the application can not work if you don\'t give us the grants to access to your GDrive. Sorry we quit.</string>
+    <string name="dobHintString">Date of Birth (DD/MM/YYYY)</string>
+    <string name="completeProfileMessageString">Complete your profile</string>
+    <string name="mobileHintString">Mobile Number</string>
+    <string name="genreHint">Genre</string>
 
     <string-array name="genre">
         <item></item>

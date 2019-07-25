@@ -38,7 +38,7 @@ dependencies {
     implementation 'android.arch.lifecycle:extensions:1.1.1'
 
 
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     // Http Logging Interceptor
@@ -53,11 +53,11 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
 
-
     //Google Signin
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'pub.devrel:easypermissions:0.3.0'
     implementation('com.google.api-client:google-api-client-android:1.25.0') {
         exclude group: 'org.apache.httpcomponents'
     }
+
 }

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".CwPreferenceActivity"
+        android:background="@color/mainBg">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Choose Preference"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="106.7dp"
+            android:layout_marginStart="9.7dp"
+            android:layout_marginEnd="9dp"
+            android:fontFamily="@font/avenirnext_medium"
+            android:textAlignment="center"
+            android:textColor="@color/profileString"
+            android:id="@+id/choosePrefMessage" />
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#ffffff"
+            android:layout_marginTop="30dp"
+            android:layout_below="@id/choosePrefMessage"
+            android:id="@+id/genreCWTextInputLayout">
+
+            <EditText
+                android:id="@+id/genreCwSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="65.5dp"
+                android:paddingBottom="15dp"
+                android:layout_marginEnd="65.5dp"
+                android:hint="Genre"
+                android:maxLines="1"
+                android:clickable="true"
+                android:editable="false"
+                android:focusable="false"
+                android:singleLine="true"
+                android:textColor="#ffffff"
+                android:fontFamily="@font/avenirnext_medium"
+                android:textSize="13.3sp"
+                android:letterSpacing="0.01" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#ffffff"
+            android:layout_marginTop="30dp"
+            android:layout_below="@id/genreCWTextInputLayout"
+            android:id="@+id/languageCwTextInputLayout">
+
+            <EditText
+                android:id="@+id/languageCwSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="65.5dp"
+                android:paddingBottom="15dp"
+                android:layout_marginEnd="65.5dp"
+                android:hint="Language"
+                android:maxLines="1"
+                android:clickable="true"
+                android:editable="false"
+                android:focusable="false"
+                android:singleLine="true"
+                android:textColor="#ffffff"
+                android:fontFamily="@font/avenirnext_medium"
+                android:textSize="13.3sp"
+                android:letterSpacing="0.01" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#ffffff"
+            android:layout_marginTop="30dp"
+            android:layout_below="@id/languageCwTextInputLayout"
+            android:id="@+id/typeCwTextInputLayout">
+
+            <EditText
+                android:id="@+id/typeCwSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="65.5dp"
+                android:paddingBottom="15dp"
+                android:layout_marginEnd="65.5dp"
+                android:hint="Type"
+                android:maxLines="1"
+                android:clickable="true"
+                android:editable="false"
+                android:focusable="false"
+                android:singleLine="true"
+                android:textColor="#ffffff"
+                android:fontFamily="@font/avenirnext_medium"
+                android:textSize="13.3sp"
+                android:letterSpacing="0.01" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="150.7dp"
+            android:layout_height="46dp"
+            android:background="#0096ff"
+            android:text="Create Profile"
+            android:textColor="#ffffff"
+            android:textSize="13.3sp"
+            android:letterSpacing="0.01"
+            android:fontFamily="@font/avenirnext_medium"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="207.3dp"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/createProfile"
+            android:textAllCaps="false"
+            style="@style/Base.TextAppearance.AppCompat"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:textSize="10sp"
+            android:layout_marginBottom="25.7dp"
+            android:textColor="#de898989"
+            tools:text="By logging in you agree to CloudWalker’s Terms &amp; Conditions and Privacy Policy."
+            android:layout_alignParentBottom="true"
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+</layout>

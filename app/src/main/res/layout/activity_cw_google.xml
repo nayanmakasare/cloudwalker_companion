@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".CwGoogleActivity">
+        <!--android:background="@color/mainBg"-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Sign in / Register"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="56.7dp"
+            android:layout_marginStart="9.7dp"
+            android:layout_marginEnd="9dp"
+            android:fontFamily="@font/avenirnext_medium"
+            android:textAlignment="center"
+            android:textColor="@color/profileString"
+            android:id="@+id/signinMessageTV" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/signInSubTextMessage"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:textSize="13.3sp"
+            android:layout_marginTop="4.3dp"
+            android:layout_marginStart="32.3dp"
+            android:layout_marginEnd="31.3dp"
+            android:textColor="#838383"
+            android:letterSpacing="0.01"
+            android:gravity="center_horizontal"
+            tools:text="Please sign in or register via your google account to create a CloudTV profile."
+            android:layout_below="@id/signinMessageTV"
+            />
+
+        <com.google.android.gms.common.SignInButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/googleButton"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/signInSubTextMessage"
+            android:layout_marginTop="277.3dp"/>
+    </RelativeLayout>
+
+</layout>
