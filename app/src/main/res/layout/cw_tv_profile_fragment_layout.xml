@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/mainBg">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="59.3dp"
+                android:layout_height="59.3dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:id="@+id/profileCircleIv"
+                android:src="@drawable/cw_icon"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="65.5dp"
+                android:layout_marginEnd="65.5dp"
+                android:layout_marginTop="22.7dp"
+                android:paddingBottom="15dp"
+                android:textColor="#ffffff"
+                android:textSize="13.3sp"
+                android:letterSpacing="0.01"
+                android:fontFamily="@font/avenirnext_medium"
+                android:id="@+id/userNameProfileEt"
+                android:editable="false"
+                android:focusable="false"
+                android:clickable="false"
+                android:text="Customer UserName "
+                android:inputType="textEmailAddress"
+                android:layout_below="@id/profileCircleIv"
+                android:backgroundTint="#979797"/>
+
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="65.5dp"
+                android:layout_marginEnd="65.5dp"
+                android:layout_marginTop="15.7dp"
+                android:paddingBottom="15dp"
+                android:textColor="#ffffff"
+                android:textSize="13.3sp"
+                android:letterSpacing="0.01"
+                android:fontFamily="@font/avenirnext_medium"
+                android:id="@+id/emailProfileEt"
+                android:editable="false"
+                android:focusable="false"
+                android:clickable="false"
+                android:text="customerEmail@gmail.com"
+                android:inputType="textEmailAddress"
+                android:layout_below="@id/userNameProfileEt"
+                android:backgroundTint="#979797"/>
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="65.5dp"
+                android:layout_marginEnd="65.5dp"
+                android:layout_marginTop="15.7dp"
+                android:paddingBottom="15dp"
+                android:textColor="#ffffff"
+                android:textSize="13.3sp"
+                android:letterSpacing="0.01"
+                android:fontFamily="@font/avenirnext_medium"
+                android:id="@+id/phoneNumberProfileET"
+                android:text="0000000000"
+                android:inputType="number"
+                android:layout_below="@id/emailProfileEt"
+                android:backgroundTint="#979797"/>
+
+
+            <TextView
+                android:layout_width="123.7dp"
+                android:layout_height="18.3dp"
+                android:text="Your Prefrences"
+                android:textSize="13.3sp"
+                android:textColor="#0092d1"
+                android:fontFamily="@font/avenirnext_medium"
+                android:layout_below="@id/phoneNumberProfileET"
+                android:layout_marginStart="65.5dp"
+                android:layout_marginTop="30.3dp"
+                android:id="@+id/prefrProfileMessageTv"/>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="#ffffff"
+                android:layout_marginTop="8.2dp"
+                android:layout_below="@id/prefrProfileMessageTv"
+                android:id="@+id/genreCWTextInputLayout">
+
+                <EditText
+                    android:id="@+id/genreCwSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="65.5dp"
+                    android:paddingBottom="15dp"
+                    android:layout_marginEnd="65.5dp"
+                    android:hint="Genre"
+                    android:maxLines="1"
+                    android:clickable="true"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    android:fontFamily="@font/avenirnext_medium"
+                    android:textSize="13.3sp"
+                    android:letterSpacing="0.01" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="#ffffff"
+                android:layout_marginTop="13.2dp"
+                android:layout_below="@id/genreCWTextInputLayout"
+                android:id="@+id/languageCwTextInputLayout">
+
+                <EditText
+                    android:id="@+id/languageCwSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="65.5dp"
+                    android:paddingBottom="15dp"
+                    android:layout_marginEnd="65.5dp"
+                    android:hint="Language"
+                    android:maxLines="1"
+                    android:clickable="true"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    android:fontFamily="@font/avenirnext_medium"
+                    android:textSize="13.3sp"
+                    android:letterSpacing="0.01" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="#ffffff"
+                android:layout_marginTop="13.2dp"
+                android:layout_below="@id/languageCwTextInputLayout"
+                android:id="@+id/typeCwTextInputLayout">
+
+                <EditText
+                    android:id="@+id/typeCwSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="65.5dp"
+                    android:paddingBottom="15dp"
+                    android:layout_marginEnd="65.5dp"
+                    android:hint="Type"
+                    android:maxLines="1"
+                    android:clickable="true"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    android:fontFamily="@font/avenirnext_medium"
+                    android:textSize="13.3sp"
+                    android:letterSpacing="0.01" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <!--<TextView-->
+                <!--android:layout_width="123.7dp"-->
+                <!--android:layout_height="18.3dp"-->
+                <!--android:text="Linked Devices"-->
+                <!--android:textSize="13.3sp"-->
+                <!--android:textColor="#0092d1"-->
+                <!--android:fontFamily="@font/avenirnext_medium"-->
+                <!--android:layout_below="@id/typeCwTextInputLayout"-->
+                <!--android:layout_marginStart="65.5dp"-->
+                <!--android:layout_marginTop="30.3dp"-->
+                <!--android:id="@+id/LinkedDeviceProfileMessage"/>-->
+
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:textSize="13.3sp"
+                android:textColor="#343434"
+                android:text="DELETE ACCOUNT"
+                android:letterSpacing="0.01"
+                android:fontFamily="@font/avenirnext_medium"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="@drawable/black_button_bg"
+                android:layout_below="@id/typeCwTextInputLayout"
+                android:layout_marginTop="21.7dp"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/deleteProfileButtom"/>
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:textSize="13.3sp"
+                android:textColor="#343434"
+                android:text="Edit Profile"
+                android:letterSpacing="0.01"
+                android:paddingTop="10dp"
+                android:textAllCaps="false"
+                android:fontFamily="@font/avenirnext_medium"
+                style="@style/Base.TextAppearance.AppCompat"
+                android:paddingBottom="10dp"
+                android:background="@drawable/black_button_bg"
+                android:layout_below="@id/deleteProfileButtom"
+                android:layout_marginTop="18.7dp"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/editProfileButton"/>
+
+        </RelativeLayout>
+
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>
+
+

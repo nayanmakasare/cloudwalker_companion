@@ -37,6 +37,22 @@ public class PreferenceManager {
 
 
 
+
+
+    private static final String GOOGLE_SIGNIN_STATUS = "googleSignInStatus";
+    private static final String CW_INTERMIDIATE_STATUS = "cwIntermideateStatus";
+    private static final String CW_PREFRENCE_STATUS = "cwPreferenceStatus";
+
+
+
+    private static final String NSD_HOST_ADDRESS = "nsdHostAddress";
+    private static final String NSD_PORT = "nsdPort";
+
+
+
+
+
+
     private SharedPreferences mPreferences;
     private SharedPreferences.Editor mEditor;
     /**
@@ -85,6 +101,41 @@ public class PreferenceManager {
     }
 
 
+    public void setGoogleSigninStatus(Boolean status) {
+        mEditor.putBoolean(GOOGLE_SIGNIN_STATUS, status);
+        mEditor.commit();
+    }
+
+
+    public Boolean getGoogleSignInStatus(){
+        return mPreferences.getBoolean(GOOGLE_SIGNIN_STATUS, false);
+    }
+
+
+
+    public void setCwIntermidiateStatus(Boolean status) {
+        mEditor.putBoolean(CW_INTERMIDIATE_STATUS, status);
+        mEditor.commit();
+    }
+
+
+    public Boolean getCwIntermidiateStatus(){
+        return mPreferences.getBoolean(CW_INTERMIDIATE_STATUS, false);
+    }
+
+
+
+    public void setCwPrefrenceStatus(Boolean status) {
+        mEditor.putBoolean(CW_PREFRENCE_STATUS, status);
+        mEditor.commit();
+    }
+
+
+    public Boolean getCwPrefrenceStatus(){
+        return mPreferences.getBoolean(CW_PREFRENCE_STATUS, false);
+    }
+
+
     public String getUserEmail() {
         return mPreferences.getString(USER_EMAIL, null);
     }
@@ -104,17 +155,36 @@ public class PreferenceManager {
     }
 
     public String getGoogleId() {
-        return mPreferences.getString(GOOGLE_ID, null);
+        return mPreferences.getString(GOOGLE_ID, "");
     }
 
     public void setGoogleId(String googleId) {
         mEditor.putString(GOOGLE_ID, googleId);
+        mEditor.apply();
         mEditor.commit();
     }
 
     public void setTvInfo(String tvInfo){
         mEditor.putString(TV_INFO, tvInfo);
         mEditor.commit();
+    }
+
+    public void setNsdHostAddress(String hostAddress) {
+        mEditor.putString(NSD_HOST_ADDRESS, hostAddress);
+        mEditor.commit();
+    }
+
+    public String getNsdHostAddress(){
+         return mPreferences.getString(NSD_HOST_ADDRESS, "");
+    }
+
+    public void setNsdPort(Integer port) {
+        mEditor.putInt(NSD_PORT, port);
+        mEditor.commit();
+    }
+
+    public int getNsdPort(){
+        return mPreferences.getInt(NSD_PORT, 0);
     }
 
     public String getTvInfo(){

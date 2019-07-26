@@ -35,6 +35,9 @@
     <string name="completeProfileMessageString">Complete your profile</string>
     <string name="mobileHintString">Mobile Number</string>
     <string name="genreHint">Genre</string>
+    <string name="tv_remote">Tv Remote</string>
+    <string name="tv_profile">Tv Profile</string>
+    <string name="device_on_network">Device on Network</string>
 
     <string-array name="genre">
         <item></item>

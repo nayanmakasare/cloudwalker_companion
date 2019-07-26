@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/mainBg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13.3sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"
+        android:textColor="#ffffff"
+        android:letterSpacing="0.01"
+        android:text="@string/app_name"
+        android:id="@+id/networkDevice"
+        android:fontFamily="@font/avenirnext_medium"/>
+    
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:src="@mipmap/dusbin"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/deleteLinkedDevice"/>
+
+</RelativeLayout>

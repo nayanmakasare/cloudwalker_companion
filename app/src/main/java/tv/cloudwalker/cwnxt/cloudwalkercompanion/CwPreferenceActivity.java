@@ -2,6 +2,7 @@ package tv.cloudwalker.cwnxt.cloudwalkercompanion;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import api.ServiceGenerator;
+import appUtils.PreferenceManager;
 import model.NewUserProfile;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -44,8 +46,17 @@ public class CwPreferenceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityCwPreferenceBinding = DataBindingUtil.setContentView(this, R.layout.activity_cw_preference);
+        PreferenceManager preferenceManager = new PreferenceManager(this);
+        Log.d(TAG, "onCreate: google status "+preferenceManager.getGoogleSignInStatus());
+        Log.d(TAG, "onCreate: interm status "+preferenceManager.getCwIntermidiateStatus());
+        Log.d(TAG, "onCreate: Pref status "+preferenceManager.getCwPrefrenceStatus());
+        Log.d(TAG, "onCreate: Google id "+preferenceManager.getGoogleId());
+
         getSupportActionBar().hide();
         newUserProfile = getIntent().getParcelableExtra(NewUserProfile.class.getSimpleName());
+        if(newUserProfile == null){
+            fetchProfileFromServer();
+        }
 
         try {
             JSONObject profileConfigObj = new JSONObject(AppUtils.loadJSONFromAsset(this));
@@ -217,7 +228,7 @@ public class CwPreferenceActivity extends AppCompatActivity {
 
     }
 
-    private void registerNewUser(Context context)
+    private void registerNewUser(final Context context)
     {
         if(NetworkUtils.getConnectivityStatus(context) > 0) {
             ServiceGenerator.getRequestApi().postUserProfile(newUserProfile).enqueue(new Callback<ResponseBody>() {
@@ -225,9 +236,22 @@ public class CwPreferenceActivity extends AppCompatActivity {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     Log.d(TAG, "onResponse: "+response.code());
                     if(response.code() == 200) {
-
+                        newUserProfile.setGenre(genreArrayList);
+                        newUserProfile.setLaunguage(languageArrayList);
+                        newUserProfile.setContentType(typeArrayList);
+                        Intent intent = new Intent(context, PrimeActivity.class);
+                        intent.putExtra(NewUserProfile.class.getSimpleName(), newUserProfile);
+                        PreferenceManager preferenceManager = new PreferenceManager(context);
+                        preferenceManager.setCwPrefrenceStatus(true);
+                        preferenceManager.setCwIntermidiateStatus(true);
+                        preferenceManager.setGoogleSigninStatus(true);
+                        startActivity(intent);
+                        finish();
                     }
-                    else {
+                    else if(response.code() == 201){
+                        Toast.makeText(CwPreferenceActivity.this, "Profile Found on Server. Fetching your profile.", Toast.LENGTH_SHORT).show();
+                        fetchProfileFromServer();
+                    }else {
                         Toast.makeText(CwPreferenceActivity.this, "Internal Server Error.", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -235,6 +259,7 @@ public class CwPreferenceActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     Log.d(TAG, "onFailure: "+t.getMessage());
+                    Toast.makeText(CwPreferenceActivity.this, "Internal Server Error.", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -242,6 +267,63 @@ public class CwPreferenceActivity extends AppCompatActivity {
             Toast.makeText(CwPreferenceActivity.this, "Not connected to Internet", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+    private void fetchProfileFromServer()
+    {
+        PreferenceManager preferenceManager = new PreferenceManager(this);
+        String googleId = preferenceManager.getGoogleId();
+        Log.d(TAG, "fetchProfileFromServer: googleId "+googleId);
+        if(googleId.isEmpty()){
+            clearAndGoToGoogleSignIn(preferenceManager);
+            return;
+        }
+        else {
+            if(NetworkUtils.getConnectivityStatus(this) != NetworkUtils.TYPE_NOT_CONNECTED){
+                ServiceGenerator.getRequestApi().getUserProfile(googleId).enqueue(new Callback<NewUserProfile>() {
+                    @Override
+                    public void onResponse(Call<NewUserProfile> call, Response<NewUserProfile> response) {
+                        if(response.code() == 200) {
+                            newUserProfile = response.body();
+                            newUserProfile.setGenre(genreArrayList);
+                            newUserProfile.setLaunguage(languageArrayList);
+                            newUserProfile.setContentType(typeArrayList);
+                            Intent intent = new Intent(CwPreferenceActivity.this, PrimeActivity.class);
+                            intent.putExtra(NewUserProfile.class.getSimpleName(), newUserProfile);
+                            PreferenceManager preferenceManager = new PreferenceManager(CwPreferenceActivity.this);
+                            preferenceManager.setCwPrefrenceStatus(true);
+                            preferenceManager.setCwIntermidiateStatus(true);
+                            preferenceManager.setGoogleSigninStatus(true);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else {
+                            clearAndGoToGoogleSignIn(new PreferenceManager(CwPreferenceActivity.this));
+                            Toast.makeText(CwPreferenceActivity.this, response.code() +" Internal server error", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<NewUserProfile> call, Throwable t) {
+                        Toast.makeText(CwPreferenceActivity.this, " Internal server error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+            else {
+                Toast.makeText(this, "Not connected to Internet", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void clearAndGoToGoogleSignIn(PreferenceManager preferenceManager){
+        preferenceManager.setGoogleSigninStatus(false);
+        preferenceManager.setCwIntermidiateStatus(false);
+        preferenceManager.setCwPrefrenceStatus(false);
+        startActivity(new Intent(this, CwGoogleActivity.class));
+        finish();
+    }
+
+
 
     private String[] getStringArrayFromJSON(JSONArray jsonArray) {
         String[] arrayList = new String[jsonArray.length()];

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".PrimeActivity"
+        android:background="@color/mainBg">
+        <android.support.design.widget.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="54.2dp"
+            android:id="@+id/primeBottomNavBar"
+            android:layout_alignParentBottom="true"
+            android:background="#333333"
+            app:menu="@menu/prime_bottom_nav_menu"
+            app:labelVisibilityMode="unlabeled"/>
+
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/primeBottomNavBar"
+            android:id="@+id/primeViewPager"/>
+    </RelativeLayout>
+</layout>

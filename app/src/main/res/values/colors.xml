@@ -21,4 +21,6 @@
 
     <color name="mainBg">#141414</color>
     <color name="profileString">#d8d8d8</color>
+
+    <color name="transparent">#19D8D8D8</color>
 </resources>

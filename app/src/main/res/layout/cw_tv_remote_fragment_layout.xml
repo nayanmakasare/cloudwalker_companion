@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/mainBg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="#d8d8d8"
+        android:gravity="center_horizontal"
+        android:layout_gravity="end"
+        android:fontFamily="@font/avenirnext_medium"
+        android:layout_margin="10dp"
+        android:text="CloudTV 1"
+        android:id="@+id/networkDevice"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_marginTop="56.7dp">
+
+        <ImageView
+            android:layout_width="99dp"
+            android:layout_height="99dp"
+            android:id="@+id/okIv"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ok" />
+        
+        <ImageView
+            android:layout_width="164dp"
+            android:layout_height="81dp"
+            android:layout_above="@id/okIv"
+            android:src="@drawable/up"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/upIv"/>
+        
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="165dp"
+            android:layout_toStartOf="@id/okIv"
+            android:layout_centerVertical="true"
+            android:src="@drawable/left"
+            android:id="@+id/leftIv"/>
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="165dp"
+            android:layout_toEndOf="@id/okIv"
+            android:layout_centerVertical="true"
+            android:src="@drawable/right"
+            android:id="@+id/rightIv"/>
+
+        <ImageView
+            android:layout_width="164dp"
+            android:layout_height="81dp"
+            android:layout_below="@id/okIv"
+            android:src="@drawable/down"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/downIv"/>
+        
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/back"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:id="@+id/homeIv"
+            android:layout_marginEnd="31.4dp"/>
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/home"
+            android:layout_marginTop="20dp"
+            android:id="@+id/backIv"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="31.4dp"/>
+    </RelativeLayout>
+</LinearLayout>

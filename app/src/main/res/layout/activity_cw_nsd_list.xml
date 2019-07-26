@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mainBg"
+        tools:context=".CwNsdListActivity">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="#d8d8d8"
+            android:textSize="20sp"
+            android:text="Select TV"
+            android:id="@+id/selectTvMessage"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="123.7dp"
+            android:layout_height="18.3dp"
+            android:text="@string/device_on_network"
+            android:textSize="13.3sp"
+            android:textColor="#0092d1"
+            android:fontFamily="@font/avenirnext_medium"
+            android:layout_below="@id/selectTvMessage"
+            android:layout_marginStart="35.5dp"
+            android:layout_marginTop="30.3dp"
+            android:id="@+id/linkedDeviceMessageTv"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/linkedDeviceList"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linkedDeviceMessageTv"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="35.5dp"
+            android:layout_marginEnd="35.5dp"
+            tools:listitem="@layout/movie_item"/>
+    </RelativeLayout>
+</layout>
+
+
