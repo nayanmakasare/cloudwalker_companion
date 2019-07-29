@@ -50,7 +50,7 @@ public class CwNsdAdapter extends ListAdapter<NsdServiceInfo, CwNsdAdapter.CwNsd
     @NonNull
     @Override
     public CwNsdViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cw_linked_device_item, viewGroup, false);
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cw_network_device, viewGroup, false);
         return new CwNsdViewHolder(itemView);
     }
 
@@ -63,12 +63,10 @@ public class CwNsdAdapter extends ListAdapter<NsdServiceInfo, CwNsdAdapter.CwNsd
     class CwNsdViewHolder extends RecyclerView.ViewHolder{
 
         TextView textView;
-        ImageView imageView;
 
         public CwNsdViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.networkDevice);
-            imageView = itemView.findViewById(R.id.deleteLinkedDevice);
 
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,22 +77,11 @@ public class CwNsdAdapter extends ListAdapter<NsdServiceInfo, CwNsdAdapter.CwNsd
                     }
                 }
             });
-
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if(listener != null  && position != RecyclerView.NO_POSITION){
-                        listener.onDeleteLinkedClicked(getItem(position));
-                    }
-                }
-            });
         }
     }
 
     public interface  OnItemClickListener{
         void onDeviceClicked(NsdServiceInfo nsdServiceInfo);
-        void onDeleteLinkedClicked(NsdServiceInfo nsdServiceInfo);
     }
 
     public void setOnItemClickedListener(OnItemClickListener listener) {

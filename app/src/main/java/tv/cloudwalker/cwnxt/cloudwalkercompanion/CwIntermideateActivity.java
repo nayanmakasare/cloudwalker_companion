@@ -42,8 +42,7 @@ public class CwIntermideateActivity extends AppCompatActivity  {
         Log.d(TAG, "onCreate: "+newUserProfile);
         if(newUserProfile == null){
             clearAndGoToGoogleSignIn(this);
-        }
-        if(newUserProfile.getEmail() != null){
+        } else if(newUserProfile.getEmail() != null){
             activityCwIntermidiateBinding.emailET.setText(newUserProfile.getEmail());
         }
 
@@ -84,11 +83,15 @@ public class CwIntermideateActivity extends AppCompatActivity  {
         activityCwIntermidiateBinding.nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(activityCwIntermidiateBinding.dobET.getText().length() >0 &&
-                        activityCwIntermidiateBinding.mobileET.getText().length() > 0 &&
-                        activityCwIntermidiateBinding.mobileET.getText().length() <=10 &&
-                        activityCwIntermidiateBinding.userNameET.getText().length() > 0)
-                {
+                if(activityCwIntermidiateBinding.userNameET.getText().length() < 4){
+                    Toast.makeText(CwIntermideateActivity.this, "UserName should be greater than 4 characters.", Toast.LENGTH_SHORT).show();
+                }else if(activityCwIntermidiateBinding.mobileET.getText().length() == 0 ){
+                    Toast.makeText(CwIntermideateActivity.this, "Please enter your mobile number.", Toast.LENGTH_SHORT).show();
+                }else if( activityCwIntermidiateBinding.mobileET.getText().length() != 10 ) {
+                    Toast.makeText(CwIntermideateActivity.this, "Invalid Mobile Number. Should contain 10 digits only.", Toast.LENGTH_SHORT).show();
+                }else if(activityCwIntermidiateBinding.dobET.getText().length() >0){
+                    Toast.makeText(CwIntermideateActivity.this, "Please enter your Date of Birth.", Toast.LENGTH_SHORT).show();
+                } else{
                     PreferenceManager preferenceManager = new PreferenceManager(v.getContext());
                     preferenceManager.setCwIntermidiateStatus(true);
                     preferenceManager.setGoogleSigninStatus(true);
@@ -100,9 +103,6 @@ public class CwIntermideateActivity extends AppCompatActivity  {
                     intent.putExtra(NewUserProfile.class.getSimpleName(), newUserProfile);
                     startActivity(intent);
                     finish();
-                }
-                else {
-                    Toast.makeText(CwIntermideateActivity.this, "Please fill all the Text fields correctly", Toast.LENGTH_SHORT).show();
                 }
             }
         });

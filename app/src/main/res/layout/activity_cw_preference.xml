@@ -117,8 +117,8 @@
             android:textSize="13.3sp"
             android:letterSpacing="0.01"
             android:fontFamily="@font/avenirnext_medium"
-            android:layout_alignParentBottom="true"
             android:layout_marginBottom="207.3dp"
+            android:layout_below="@id/typeCwTextInputLayout"
             android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
             android:id="@+id/createProfile"
@@ -132,13 +132,13 @@
             android:layout_marginStart="40dp"
             android:layout_marginEnd="40dp"
             android:textSize="10sp"
+            android:layout_below="@id/createProfile"
             android:layout_marginBottom="25.7dp"
             android:textColor="#de898989"
-            tools:text="By logging in you agree to CloudWalker’s Terms &amp; Conditions and Privacy Policy."
+            android:text="By logging in you agree to CloudWalker’s Terms &amp; Conditions and Privacy Policy."
             android:layout_alignParentBottom="true"
             android:textAlignment="center"
             android:layout_centerHorizontal="true" />
-
     </RelativeLayout>
 
 </layout>
