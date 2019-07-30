@@ -52,7 +52,7 @@ public class CwLinkedDevicesAdapter extends ListAdapter<String, CwLinkedDevicesA
 
     @Override
     public void onBindViewHolder(@NonNull CwLinkedDeviceViewHolder cwNsdViewHolder, int i) {
-        String nsdServiceInfo = getItem(i);
+        String nsdServiceInfo = "CloudTv_" + getItem(i);
         cwNsdViewHolder.textView.setText(nsdServiceInfo);
     }
 

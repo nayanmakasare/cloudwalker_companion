@@ -43,135 +43,107 @@ public class CwNsdListActivity extends AppCompatActivity {
     private NsdServiceInfo nsdLinkedServiceInfo;
     private PreferenceManager preferenceManager;
 
-    private NsdManager.DiscoveryListener mDiscoveryListener = new NsdManager.DiscoveryListener() {
-        @Override
-        public void onStartDiscoveryFailed(String serviceType, int errorCode) {
-            Log.d(TAG, "onStartDiscoveryFailed: ");
-        }
-
-        @Override
-        public void onStopDiscoveryFailed(String serviceType, int errorCode) {
-            Log.d(TAG, "onStopDiscoveryFailed: ");
-        }
-
-        @Override
-        public void onDiscoveryStarted(String serviceType) {
-            Log.d(TAG, "onDiscoveryStarted: ");
-        }
-
-        @Override
-        public void onDiscoveryStopped(String serviceType) {
-            Log.d(TAG, "onDiscoveryStopped: ");
-        }
-
-        @Override
-        public void onServiceFound(NsdServiceInfo serviceInfo) {
-            Log.d(TAG, "onServiceFound: "+serviceInfo.getServiceName());
-            nsdServiceInfoList.add(serviceInfo);
-            CwNsdListActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    cwNsdAdapter.submitList(nsdServiceInfoList);
-                }
-            });
-        }
-
-        @Override
-        public void onServiceLost(NsdServiceInfo serviceInfo) {
-            Log.d(TAG, "onServiceLost: "+serviceInfo.getServiceName());
-            if(nsdServiceInfoList.contains(serviceInfo)){
-                nsdServiceInfoList.remove(serviceInfo);
-            }
-        }
-    };
-
-
-    private NsdManager.ResolveListener resolveListener = new NsdManager.ResolveListener() {
-        @Override
-        public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
-            Log.d(TAG, "onResolveFailed: ");
-        }
-
-        @Override
-        public void onServiceResolved(NsdServiceInfo serviceInfo) {
-            Log.d(TAG, "onServiceResolved: ");
-            nsdLinkedServiceInfo = serviceInfo;
-            socketConnection =  new SocketConnection();
-            socketConnection.sayHello(serviceInfo.getHost().getHostAddress(), serviceInfo.getPort(), "sendTvInfo");
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityCwNsdListBinding = DataBindingUtil.setContentView(this, R.layout.activity_cw_nsd_list);
         preferenceManager = new PreferenceManager(this);
-        Set<String> linkedDevice = preferenceManager.getLinkedNsdDevices();
-        if(linkedDevice != null){
-            for(String s : linkedDevice){
-                Log.d(TAG, "onCreate: linked devices "+s);
+
+        Set<String> linkedDevices = preferenceManager.getLinkedNsdDevices();
+        Log.d(TAG, "onCreate: linked "+linkedDevices);
+        if(linkedDevices != null){
+            for(String s : linkedDevices){
+                Log.d(TAG, "onCreate: linked Devices "+s);
             }
         }
+
         getSupportActionBar().hide();
         nsdManager = (NsdManager)getSystemService(Context.NSD_SERVICE);
         activityCwNsdListBinding.linkedDeviceList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         activityCwNsdListBinding.linkedDeviceList.setAdapter(cwNsdAdapter);
-        nsdManager.discoverServices("_http._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
+        nsdManager.discoverServices("_http._tcp.", NsdManager.PROTOCOL_DNS_SD, new NsdManager.DiscoveryListener() {
+            @Override
+            public void onStartDiscoveryFailed(String serviceType, int errorCode) {
+                Log.d(TAG, "onStartDiscoveryFailed: ");
+            }
+
+            @Override
+            public void onStopDiscoveryFailed(String serviceType, int errorCode) {
+                Log.d(TAG, "onStopDiscoveryFailed: ");
+            }
+
+            @Override
+            public void onDiscoveryStarted(String serviceType) {
+                Log.d(TAG, "onDiscoveryStarted: ");
+            }
+
+            @Override
+            public void onDiscoveryStopped(String serviceType) {
+                Log.d(TAG, "onDiscoveryStopped: ");
+            }
+
+            @Override
+            public void onServiceFound(NsdServiceInfo serviceInfo) {
+                Log.d(TAG, "onServiceFound: "+serviceInfo.getServiceName());
+                if(!nsdServiceInfoList.contains(serviceInfo)){
+                    Log.d(TAG, "onServiceFound: adding to list.");
+                    nsdServiceInfoList.add(serviceInfo);
+                    CwNsdListActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            cwNsdAdapter.submitList(nsdServiceInfoList);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onServiceLost(NsdServiceInfo serviceInfo) {
+                Log.d(TAG, "onServiceLost: "+serviceInfo.getServiceName());
+                nsdServiceInfoList.remove(serviceInfo);
+            }
+        });
 
         cwNsdAdapter.setOnItemClickedListener(new CwNsdAdapter.OnItemClickListener() {
             @Override
             public void onDeviceClicked(NsdServiceInfo nsdServiceInfo) {
-                Set<String> linkedDevices  = preferenceManager.getLinkedNsdDevices();
-                if(linkedDevices != null && linkedDevices.size() > 0 && linkedDevices.contains(nsdServiceInfo.getServiceName())){
-                    Toast.makeText(getApplicationContext(), "This device is already Linked", Toast.LENGTH_LONG).show();
-                    preferenceManager.setNsdHostAddress(nsdServiceInfo.getHost().getHostAddress());
-                    preferenceManager.setNsdPort(nsdServiceInfo.getPort());
-                    finish();
-                }else {
-                    nsdManager.resolveService(nsdServiceInfo, resolveListener);
-                }
+                //As the list of NSdServiceInfo are stored are of discovered device so there will not be no host and port in it.
+                // I will only get after resolving the service.
+                nsdManager.resolveService(nsdServiceInfo, new NsdManager.ResolveListener() {
+                    @Override
+                    public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
+                        Log.d(TAG, "onResolveFailed: ");
+                    }
+
+                    @Override
+                    public void onServiceResolved(NsdServiceInfo serviceInfo) {
+                        Log.d(TAG, "onServiceResolved: ");
+                        nsdLinkedServiceInfo = serviceInfo;
+                        socketConnection =  new SocketConnection();
+                        socketConnection.sayHello(serviceInfo.getHost().getHostAddress(), serviceInfo.getPort(), "sendTvInfo");
+                    }
+                });
             }
         });
     }
 
-    private void registerDevice(String infoString)
-    {
+    private void registerDevice(String infoString) {
         if(NetworkUtils.getConnectivityStatus(this) > 0) {
             Log.d(TAG, "registerDevice: ");
             final String[] contentPices = infoString.split("~");
-            final TvInfo tvInfo = new TvInfo(contentPices[4],contentPices[1], contentPices[2] );
-            final PreferenceManager preferenceManager = new PreferenceManager(this);
+            final TvInfo tvInfo = new TvInfo(contentPices[4],contentPices[1], contentPices[2]);
             ServiceGenerator.getRequestApi().postNewTvDevice(tvInfo, preferenceManager.getGoogleId()).enqueue(new Callback<TvInfo>() {
                 @Override
-                public void onResponse(Call<TvInfo> call, Response<TvInfo> response) {
+                public void onResponse(Call<TvInfo> call, Response<TvInfo> response){
                     Log.d(TAG, "onResponse: "+response.code());
                         if(response.code() == 200) {
-                            Toast.makeText(getApplicationContext(), "Linked Device Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Linking and connecting device.", Toast.LENGTH_SHORT).show();
                             socketConnection.sayHello(nsdLinkedServiceInfo.getHost().getHostAddress(), nsdLinkedServiceInfo.getPort(), "showProfile");
-                            try {
-                                socketConnection.mSocket.close();
-                                socketConnection.stopCommunicationThread();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            Set<String> linkedDevice = preferenceManager.getLinkedNsdDevices();
-                            if(linkedDevice == null){
-                                linkedDevice = new HashSet<>();
-                            }
-                            if(!linkedDevice.contains(tvInfo.getEmac())){
-                                Log.d(TAG, "onResponse: added linked device in prefrence.");
-                                linkedDevice.add(tvInfo.getEmac());
-                            }
-                            preferenceManager.setLinkedNsdDevices(linkedDevice);
-                            Intent data = new Intent(CwNsdListActivity.this, PrimeActivity.class);
-                            Log.d(TAG, "onResponse: nsdAddress "+nsdLinkedServiceInfo.getHost().getHostAddress());
-                            Log.d(TAG, "onResponse: port "+nsdLinkedServiceInfo.getPort());
-                            data.putExtra("nsdAddress", nsdLinkedServiceInfo.getHost().getHostAddress());
-                            data.putExtra("port", nsdLinkedServiceInfo.getPort());
-                            setResult(RESULT_OK, data);
-                            finish();
-                        }
-                        else {
+                            linkedServiceAndExit(tvInfo.getEmac());
+                        }else if(response.code() == 406){
+                            linkedServiceAndExit(tvInfo.getEmac());
+                        } else {
                             Toast.makeText(getApplicationContext(), "Internal Server Error", Toast.LENGTH_SHORT).show();
                         }
                 }
@@ -185,6 +157,35 @@ public class CwNsdListActivity extends AppCompatActivity {
         else {
             Toast.makeText(this, "Not connected to internet. Cannot link your device", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void linkedServiceAndExit(String serviceEmac){
+        // killing bg thread
+        try {
+            socketConnection.mSocket.close();
+            socketConnection.stopCommunicationThread();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //setting service for use
+        Set<String> linkedDevice = preferenceManager.getLinkedNsdDevices();
+        if(linkedDevice == null){
+            linkedDevice = new HashSet<>();
+        }
+        if(!linkedDevice.contains(serviceEmac)){
+            Log.d(TAG, "onResponse: added linked device in prefrence.");
+            linkedDevice.add(serviceEmac);
+        }
+        preferenceManager.setLinkedNsdDevices(linkedDevice);
+        Intent data = new Intent(CwNsdListActivity.this, PrimeActivity.class);
+        Log.d(TAG, "onResponse: nsdAddress "+nsdLinkedServiceInfo.getHost().getHostAddress());
+        Log.d(TAG, "onResponse: port "+nsdLinkedServiceInfo.getPort());
+        data.putExtra("nsdAddress", nsdLinkedServiceInfo.getHost().getHostAddress());
+        data.putExtra("port", nsdLinkedServiceInfo.getPort());
+        data.putExtra("serviceName", nsdLinkedServiceInfo.getServiceName());
+        setResult(RESULT_OK, data);
+        finish();
     }
 
     private class SocketConnection {
@@ -223,17 +224,10 @@ public class CwNsdListActivity extends AppCompatActivity {
 
                             if (receivedMessage.contains("tvinfo~")) {
                                 Log.d(TAG, "run: recevice in if ");
-                                String[] contentPices = receivedMessage.split("~");
-                                boolean result = isDeviceLinked(contentPices[4]);
-                                if (!result){
-                                    Log.d(TAG, "run: linking device");
-                                    registerDevice(receivedMessage);
-                                }
+                                registerDevice(receivedMessage);
                             }else if(receivedMessage.contains("showProfile")){
                                 os.close();
                                 is.close();
-                                mSocket.close();
-                                stopCommunicationThread();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -255,20 +249,8 @@ public class CwNsdListActivity extends AppCompatActivity {
             if(socketCommunicationThread != null && socketCommunicationThread.isAlive()){
                 Log.d(TAG, "stopCommunicationThread: stoping ");
                 socketCommunicationThread.interrupt();
+                finish();
             }
-        }
-    }
-
-
-
-    private boolean isDeviceLinked(String tvEmac) {
-        PreferenceManager preferenceManager = new PreferenceManager(this);
-        Set<String> linkedDevices = preferenceManager.getLinkedNsdDevices();
-        if(linkedDevices == null) {
-            return false;
-        }
-        else {
-            return linkedDevices.contains(tvEmac);
         }
     }
 }

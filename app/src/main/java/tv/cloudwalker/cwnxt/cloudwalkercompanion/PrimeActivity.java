@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import adapter.FragmentAdapter;
 import appUtils.PreferenceManager;
@@ -22,8 +23,7 @@ public class PrimeActivity extends AppCompatActivity {
 
     private ActivityPrimeBinding activityPrimeBinding;
     private static final String TAG = "PrimeActivity";
-    private CwTvRemoteFragment cwTvRemoteFragment = new CwTvRemoteFragment();
-
+    public CwTvRemoteFragment cwTvRemoteFragment = new CwTvRemoteFragment();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -35,21 +35,23 @@ public class PrimeActivity extends AppCompatActivity {
                 case R.id.tv_profile:
                     activityPrimeBinding.primeViewPager.setCurrentItem(1);
                     return true;
+//                case R.id.tv_moviebox:
+//                    activityPrimeBinding.primeViewPager.setCurrentItem(2);
+//                    return true;
             }
             return false;
         }
     };
 
+
+    public void disableProgressBar(){
+        activityPrimeBinding.mainProgressBar.setVisibility(View.INVISIBLE);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityPrimeBinding = DataBindingUtil.setContentView(this, R.layout.activity_prime);
-        PreferenceManager preferenceManager = new PreferenceManager(this);
-        Log.d(TAG, "onCreate: google status "+preferenceManager.getGoogleSignInStatus());
-        Log.d(TAG, "onCreate: interm status "+preferenceManager.getCwIntermidiateStatus());
-        Log.d(TAG, "onCreate: Pref status "+preferenceManager.getCwPrefrenceStatus());
-        Log.d(TAG, "onCreate: Google id "+preferenceManager.getGoogleId());
-
         getSupportActionBar().hide();
         checkingSignInStatus();
         setupFm(getSupportFragmentManager(), activityPrimeBinding.primeViewPager);
@@ -81,6 +83,7 @@ public class PrimeActivity extends AppCompatActivity {
         FragmentAdapter adapter = new FragmentAdapter(fragmentManager);
         adapter.add(cwTvRemoteFragment, "Tv Remote");
         adapter.add(new CwTvProfileFragment(), "Tv Profile");
+//        adapter.add(new MovieBoxFragment(), "Tv MovieBox");
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(0);
     }
@@ -92,8 +95,9 @@ public class PrimeActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK) {
             Log.d(TAG, "onActivityResult: in ");
             String address = data.getStringExtra("nsdAddress");
+            String serviceName = data.getStringExtra("serviceName");
             int port = data.getIntExtra("port", 0);
-            cwTvRemoteFragment.setNewDeviceForCommunication(address, port);
+            cwTvRemoteFragment.setNewDeviceForCommunication(address, port, serviceName);
         }
     }
 
@@ -110,6 +114,9 @@ public class PrimeActivity extends AppCompatActivity {
                 case 1:
                     activityPrimeBinding.primeBottomNavBar.setSelectedItemId(R.id.tv_profile);
                     break;
+//                case 2:
+//                    activityPrimeBinding.primeBottomNavBar.setSelectedItemId(R.id.tv_moviebox);
+//                    break;
             }
         }
         @Override

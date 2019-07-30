@@ -4,26 +4,32 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/White"
+    android:background="@color/mainBg"
     android:fillViewport="true"
     android:fitsSystemWindows="true">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:id="@+id/app_bar"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:background="@color/mainBg">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            android:background="@android:color/white">
+            android:background="@color/mainBg">
             <android.support.v7.widget.SearchView
+                android:background="@drawable/bg_white_rounded"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:requiresFadingEdge="horizontal"
                 android:layout_margin="5dp"
                 android:id="@+id/searchView"
+                android:textSize="15.3sp"
+                android:letterSpacing="0.01"
+                android:fontFamily="@font/avenirnext_medium"
                 app:divider="@android:color/black"
                 app:dividerPadding="2dp"
                 app:showDividers="end"
@@ -45,3 +51,10 @@
         android:id="@+id/moviesRecycler"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 </android.support.design.widget.CoordinatorLayout>
+
+
+
+
+
+
+

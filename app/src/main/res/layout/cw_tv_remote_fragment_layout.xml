@@ -18,7 +18,8 @@
             android:gravity="center_horizontal"
             android:layout_gravity="end"
             android:fontFamily="@font/avenirnext_medium"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:text="CloudTV 1"
             android:id="@+id/networkDevice"/>
 

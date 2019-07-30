@@ -15,6 +15,7 @@ import java.util.List;
 
 import api.CustomHttpClient;
 import api.MyProfileInterface;
+import api.ServiceGenerator;
 import model.MovieResponse;
 import model.MovieRow;
 import model.MovieTile;
@@ -41,11 +42,9 @@ public class MovieBoxRepository
     }
 
     private void populateData(Context context) {
-
       new Retrofit.Builder()
-                .baseUrl("http://tvapi.cloudwalker.tv/")
+                .baseUrl("http://192.168.1.143:9876/")
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(CustomHttpClient.getHttpClient(context,"http://tvapi.cloudwalker.tv/"))
                 .build()
                 .create(MyProfileInterface.class)
               .getHomeScreenData()

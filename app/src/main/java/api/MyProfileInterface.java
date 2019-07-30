@@ -53,7 +53,7 @@ public interface MyProfileInterface {
     Call<ResponseBody> deleteProfile(@Path("googleId") String googleId);
 
     @Headers({"Accept-Version: 1.0.0"})
-    @GET("cats")
+    @GET("cats.json")
     Call<MovieResponse> getHomeScreenData();
 
 

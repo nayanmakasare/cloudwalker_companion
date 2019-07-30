@@ -89,9 +89,7 @@ public class CwIntermideateActivity extends AppCompatActivity  {
                     Toast.makeText(CwIntermideateActivity.this, "Please enter your mobile number.", Toast.LENGTH_SHORT).show();
                 }else if( activityCwIntermidiateBinding.mobileET.getText().length() != 10 ) {
                     Toast.makeText(CwIntermideateActivity.this, "Invalid Mobile Number. Should contain 10 digits only.", Toast.LENGTH_SHORT).show();
-                }else if(activityCwIntermidiateBinding.dobET.getText().length() >0){
-                    Toast.makeText(CwIntermideateActivity.this, "Please enter your Date of Birth.", Toast.LENGTH_SHORT).show();
-                } else{
+                }else{
                     PreferenceManager preferenceManager = new PreferenceManager(v.getContext());
                     preferenceManager.setCwIntermidiateStatus(true);
                     preferenceManager.setGoogleSigninStatus(true);
@@ -102,7 +100,7 @@ public class CwIntermideateActivity extends AppCompatActivity  {
                     Intent intent = new Intent(v.getContext(), CwPreferenceActivity.class);
                     intent.putExtra(NewUserProfile.class.getSimpleName(), newUserProfile);
                     startActivity(intent);
-                    finish();
+//                    finish();
                 }
             }
         });

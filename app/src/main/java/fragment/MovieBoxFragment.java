@@ -4,6 +4,9 @@ package fragment;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
+import android.net.nsd.NsdManager;
+import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,12 +22,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.List;
+import java.util.Set;
 
 import adapter.MovieAdapter;
+import appUtils.PreferenceManager;
 import appUtils.SearchDataLoader;
 import model.MovieTile;
+import tv.cloudwalker.cwnxt.cloudwalkercompanion.CwNsdListActivity;
 import tv.cloudwalker.cwnxt.cloudwalkercompanion.MainActivity;
 import tv.cloudwalker.cwnxt.cloudwalkercompanion.R;
 import viewModel.MovieBoxViewModel;
@@ -36,6 +47,15 @@ public class MovieBoxFragment extends Fragment implements LoaderManager.LoaderCa
     private MovieAdapter movieAdapter = new MovieAdapter();
     private ProgressBar progressBar;
     private SearchView searchView ;
+    private PreferenceManager preferenceManager;
+    private Set<String> linkedDevices;
+    private NsdManager nsdManager;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        preferenceManager = new PreferenceManager(getActivity());
+    }
 
     @Nullable
     @Override
@@ -47,11 +67,11 @@ public class MovieBoxFragment extends Fragment implements LoaderManager.LoaderCa
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView movieRecyclerView = view.findViewById(R.id.moviesRecycler);
+        nsdManager = (NsdManager) getActivity().getSystemService(Context.NSD_SERVICE);
         movieRecyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 3, GridLayoutManager.VERTICAL, false));
         movieRecyclerView.setAdapter(movieAdapter);
 
         progressBar =  view.findViewById(R.id.loadingProgress);
-
         searchView =  view.findViewById(R.id.searchView);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -95,13 +115,35 @@ public class MovieBoxFragment extends Fragment implements LoaderManager.LoaderCa
                 stringBuilder.append(movieTile.getTarget().get(0));
                 stringBuilder.append("~");
                 stringBuilder.append(movieTile.getType());
-                movieBoxViewModel.sendPlayMovieNsdMessage(
-                        ((MainActivity)getActivity()).getNsdHost(),
-                        ((MainActivity)getActivity()).getNsdPort(),
-                        stringBuilder.toString());
-
+                communication(stringBuilder.toString());
             }
         });
+    }
+
+    private void communication(final String message){
+        if(preferenceManager.getNsdPort() > 0 ){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Socket communicationSocket = new Socket();
+                        communicationSocket.connect(new InetSocketAddress(preferenceManager.getNsdHostAddress(), preferenceManager.getNsdPort()));
+                        DataOutputStream os = new DataOutputStream(communicationSocket.getOutputStream());
+                        os.write(message.getBytes());
+                        os.flush();
+                        os.close();
+                        communicationSocket.close();
+                        Thread.currentThread().interrupt();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        startActivityForResult(new Intent(getActivity(), CwNsdListActivity.class), 700);
+                    }
+                }
+            }).start();
+        }else {
+            Toast.makeText(getActivity(), "Not able to connect to the device, please try to connect again.", Toast.LENGTH_SHORT).show();
+            startActivityForResult(new Intent(getActivity(), CwNsdListActivity.class), 700);
+        }
     }
 
     @NonNull
@@ -129,11 +171,6 @@ public class MovieBoxFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoaderReset(@NonNull Loader<List<MovieTile>> loader) {
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 }
 

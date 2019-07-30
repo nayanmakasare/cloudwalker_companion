@@ -22,7 +22,7 @@
             android:layout_width="123.7dp"
             android:layout_height="18.3dp"
             android:text="@string/device_on_network"
-            android:textSize="13.3sp"
+            android:textSize="15.3sp"
             android:textColor="#0092d1"
             android:fontFamily="@font/avenirnext_medium"
             android:layout_below="@id/selectTvMessage"

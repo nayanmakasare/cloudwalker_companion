@@ -38,6 +38,7 @@
     <string name="tv_remote">Tv Remote</string>
     <string name="tv_profile">Tv Profile</string>
     <string name="device_on_network">Device on Network</string>
+    <string name="movie_box">Movie Box</string>
 
     <string-array name="genre">
         <item></item>

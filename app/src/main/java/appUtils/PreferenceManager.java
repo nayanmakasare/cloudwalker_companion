@@ -50,6 +50,9 @@ public class PreferenceManager {
 
 
 
+    private static final String CURRENT_NSD_SERVICE_CONNECTED = "currentNsdServiceConnected";
+
+
 
 
 
@@ -77,6 +80,15 @@ public class PreferenceManager {
     public void setUserName(String userName) {
         mEditor.putString(USER_NAME, userName);
         mEditor.commit();
+    }
+
+    public void setCurrentNsdServiceConnected(String emac){
+        mEditor.putString(CURRENT_NSD_SERVICE_CONNECTED, emac);
+        mEditor.commit();
+    }
+
+    public String getCurrentNsdServiceConnected(){
+        return mPreferences.getString(CURRENT_NSD_SERVICE_CONNECTED, "");
     }
 
     public Set<String> getLinkedNsdDevices()

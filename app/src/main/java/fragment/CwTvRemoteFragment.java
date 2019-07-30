@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import java.util.Set;
 
 import appUtils.PreferenceManager;
 import tv.cloudwalker.cwnxt.cloudwalkercompanion.CwNsdListActivity;
+import tv.cloudwalker.cwnxt.cloudwalkercompanion.PrimeActivity;
 import tv.cloudwalker.cwnxt.cloudwalkercompanion.R;
 import tv.cloudwalker.cwnxt.cloudwalkercompanion.databinding.CwTvRemoteFragmentLayoutBinding;
 
@@ -36,95 +38,44 @@ public class CwTvRemoteFragment extends Fragment
     private CwTvRemoteFragmentLayoutBinding tvRemoteFragmentLayoutBinding;
 
 
-    private NsdManager.DiscoveryListener mDiscoveryListener = new NsdManager.DiscoveryListener() {
-        @Override
-        public void onStartDiscoveryFailed(String serviceType, int errorCode) {
-            Log.d(TAG, "onStartDiscoveryFailed: ");
-        }
-
-        @Override
-        public void onStopDiscoveryFailed(String serviceType, int errorCode) {
-            Log.d(TAG, "onStopDiscoveryFailed: ");
-        }
-
-        @Override
-        public void onDiscoveryStarted(String serviceType) {
-            Log.d(TAG, "onDiscoveryStarted: ");
-        }
-
-        @Override
-        public void onDiscoveryStopped(String serviceType) {
-            Log.d(TAG, "onDiscoveryStopped: ");
-        }
-
-        @Override
-        public void onServiceFound(final NsdServiceInfo serviceInfo) {
-            Log.d(TAG, "onServiceFound: "+serviceInfo.getServiceName());
-
-            for (String devices : linkedDevices){
-                if(serviceInfo.getServiceName().contains(devices)){
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            tvRemoteFragmentLayoutBinding.networkDevice.setText(serviceInfo.getServiceName());
-                        }
-                    });
-                    nsdManager.resolveService(serviceInfo, resolveListener);
-                    break;
-                }
-            }
-        }
-
-        @Override
-        public void onServiceLost(NsdServiceInfo serviceInfo) {
-            Log.d(TAG, "onServiceLost: ");
-        }
-    };
-
-    private NsdManager.ResolveListener resolveListener = new NsdManager.ResolveListener() {
-        @Override
-        public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
-            Log.d(TAG, "onResolveFailed: ");
-        }
-
-        @Override
-        public void onServiceResolved(NsdServiceInfo serviceInfo) {
-            Log.d(TAG, "onServiceResolved: ");
-            preferenceManager.setNsdHostAddress(serviceInfo.getHost().getHostAddress());
-            preferenceManager.setNsdPort(serviceInfo.getPort());
-        }
-    };
-
-
-    public void setNewDeviceForCommunication(String hostAddress, int port){
-        Log.d(TAG, "setNewDeviceForCommunication: address "+hostAddress+" port     "+port);
+    public void setNewDeviceForCommunication(String hostAddress, int port, String serviceName){
+        Log.d(TAG, "setNewDeviceForCommunication: address "+hostAddress+" port     "+port+" "+serviceName);
         preferenceManager.setNsdHostAddress(hostAddress);
         preferenceManager.setNsdPort(port);
+        preferenceManager.setCurrentNsdServiceConnected(serviceName);
+        tvRemoteFragmentLayoutBinding.networkDevice.setText(serviceName);
     }
 
     private void communication(final String message){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Socket communicationSocket = new Socket();
-                    communicationSocket.connect(new InetSocketAddress(preferenceManager.getNsdHostAddress(), preferenceManager.getNsdPort()));
-                    DataOutputStream os = new DataOutputStream(communicationSocket.getOutputStream());
-                    os.write(message.getBytes());
-                    os.flush();
-                    os.close();
-                    communicationSocket.close();
-                    Thread.currentThread().interrupt();
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if(preferenceManager.getNsdPort() > 0 ){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Socket communicationSocket = new Socket();
+                        communicationSocket.connect(new InetSocketAddress(preferenceManager.getNsdHostAddress(), preferenceManager.getNsdPort()));
+                        DataOutputStream os = new DataOutputStream(communicationSocket.getOutputStream());
+                        os.write(message.getBytes());
+                        os.flush();
+                        os.close();
+                        communicationSocket.close();
+                        Thread.currentThread().interrupt();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        }else {
+            connectingToLinkedDevice();
+        }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferenceManager = new PreferenceManager(getActivity());
+        nsdManager = (NsdManager) getActivity().getSystemService(Context.NSD_SERVICE);
+        connectingToLinkedDevice();
     }
 
     @Nullable
@@ -137,10 +88,7 @@ public class CwTvRemoteFragment extends Fragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        preferenceManager = new PreferenceManager(getActivity());
         vibe = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-        nsdManager = (NsdManager) getActivity().getSystemService(Context.NSD_SERVICE);
-        connectingToLinkedDevice();
         tvRemoteFragmentLayoutBinding.networkDevice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,6 +153,8 @@ public class CwTvRemoteFragment extends Fragment
                 communication("4");
             }
         });
+
+        ((PrimeActivity)getActivity()).disableProgressBar();
     }
 
     private void connectingToLinkedDevice() {
@@ -213,9 +163,69 @@ public class CwTvRemoteFragment extends Fragment
         if(linkedDevices == null) {
             Log.d(TAG, "connectingToLinkedDevice: show list activty");
             startActivityForResult(new Intent(getActivity(), CwNsdListActivity.class), 700);
-        }
-        else {
-            nsdManager.discoverServices("_http._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
+        }else if(linkedDevices.size() == 0){
+            startActivityForResult(new Intent(getActivity(), CwNsdListActivity.class), 700);
+        } else {
+            nsdManager.discoverServices("_http._tcp.", NsdManager.PROTOCOL_DNS_SD, new NsdManager.DiscoveryListener() {
+                @Override
+                public void onStartDiscoveryFailed(String serviceType, int errorCode) {
+                    Log.d(TAG, "onStartDiscoveryFailed: ");
+                }
+
+                @Override
+                public void onStopDiscoveryFailed(String serviceType, int errorCode) {
+                    Log.d(TAG, "onStopDiscoveryFailed: ");
+                }
+
+                @Override
+                public void onDiscoveryStarted(String serviceType) {
+                    Log.d(TAG, "onDiscoveryStarted: ");
+                }
+
+                @Override
+                public void onDiscoveryStopped(String serviceType) {
+                    Log.d(TAG, "onDiscoveryStopped: ");
+                }
+
+                @Override
+                public void onServiceFound(final NsdServiceInfo serviceInfo) {
+                    Log.d(TAG, "onServiceFound: "+serviceInfo.getServiceName());
+
+                    for (String devices : linkedDevices){
+                        if(serviceInfo.getServiceName().contains(devices)){
+                            //found in linked Device
+                            nsdManager.resolveService(serviceInfo, new NsdManager.ResolveListener() {
+                                @Override
+                                public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
+                                    Log.d(TAG, "onResolveFailed: ");
+                                }
+
+                                @Override
+                                public void onServiceResolved(final NsdServiceInfo serviceInfo) {
+                                    Log.d(TAG, "onServiceResolved: ");
+                                    preferenceManager.setNsdHostAddress(serviceInfo.getHost().getHostAddress());
+                                    preferenceManager.setNsdPort(serviceInfo.getPort());
+                                    preferenceManager.setCurrentNsdServiceConnected(serviceInfo.getServiceName());
+
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getActivity(), "Got linked device resolving.", Toast.LENGTH_SHORT).show();
+                                            tvRemoteFragmentLayoutBinding.networkDevice.setText(serviceInfo.getServiceName());
+                                        }
+                                    });
+                                }
+                            });
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onServiceLost(NsdServiceInfo serviceInfo) {
+                    Log.d(TAG, "onServiceLost: ");
+                }
+            });
         }
     }
 }
