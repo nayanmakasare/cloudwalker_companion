@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -143,6 +144,7 @@ public class CwTvProfileFragment extends Fragment {
         cwTvProfileFragmentLayoutBinding.genreCwSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                hideSoftKeyboard();
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 genreArrayList = new ArrayList<>();
                 builder.setTitle("Select Genre");
@@ -162,6 +164,7 @@ public class CwTvProfileFragment extends Fragment {
                         }
                     }
                 });
+
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -233,7 +236,6 @@ public class CwTvProfileFragment extends Fragment {
             }
         });
 
-
         cwTvProfileFragmentLayoutBinding.typeCwSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -303,7 +305,11 @@ public class CwTvProfileFragment extends Fragment {
                     modifiedNewUserProfile.setEmail(cwTvProfileFragmentLayoutBinding.emailProfileEt.getText().toString());
                     modifiedNewUserProfile.setDob(newUserProfile.getDob());
                     modifiedNewUserProfile.setCwId(newUserProfile.getCwId());
-
+                    if(currentLinkedDevices != null || currentLinkedDevices.size() > 0){
+                        modifiedNewUserProfile.setLinkedDevices(currentLinkedDevices);
+                    }else {
+                        modifiedNewUserProfile.setLinkedDevices(new ArrayList<TvInfo>());
+                    }
                     editProfile();
                 }
             }
@@ -480,6 +486,7 @@ public class CwTvProfileFragment extends Fragment {
                             if(response.code() == 200){
                                 newUserProfile = modifiedNewUserProfile;
                                 fillProfile();
+                                Toast.makeText(getActivity(), "Profile updated successfully", Toast.LENGTH_SHORT).show();
                             }else {
                                 Toast.makeText(getActivity(), "Internal server error", Toast.LENGTH_SHORT).show();
                             }
@@ -626,15 +633,7 @@ public class CwTvProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         fetchProfileFromServer();
-
-
-//        Log.d(TAG, "onResume: ");
-//        Set<String> linkedDevice = preferenceManager.getLinkedNsdDevices();
-//        if(linkedDevice != null){
-//            cwLinkedDevicesAdapter.submitList(new ArrayList<>(linkedDevice));
-//        }
     }
 
     private void fetchProfileFromServer() {

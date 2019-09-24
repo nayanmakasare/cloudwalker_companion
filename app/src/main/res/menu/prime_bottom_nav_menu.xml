@@ -11,9 +11,9 @@
         android:icon="@drawable/profile_normal"
         android:title="@string/tv_profile"/>
 
-    <!--<item-->
-        <!--android:id="@+id/tv_moviebox"-->
-        <!--android:icon="@drawable/profile_normal"-->
-        <!--android:title="@string/movie_box"/>-->
+    <item
+        android:id="@+id/tv_moviebox"
+        android:icon="@drawable/profile_normal"
+        android:title="@string/movie_box"/>
 
 </menu>

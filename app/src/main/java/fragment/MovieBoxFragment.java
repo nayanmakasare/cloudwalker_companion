@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.nsd.NsdManager;
-import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,7 +35,6 @@ import appUtils.PreferenceManager;
 import appUtils.SearchDataLoader;
 import model.MovieTile;
 import tv.cloudwalker.cwnxt.cloudwalkercompanion.CwNsdListActivity;
-import tv.cloudwalker.cwnxt.cloudwalkercompanion.MainActivity;
 import tv.cloudwalker.cwnxt.cloudwalkercompanion.R;
 import viewModel.MovieBoxViewModel;
 
@@ -49,7 +47,8 @@ public class MovieBoxFragment extends Fragment implements LoaderManager.LoaderCa
     private SearchView searchView ;
     private PreferenceManager preferenceManager;
     private Set<String> linkedDevices;
-    private NsdManager nsdManager;
+//    private NsdManager nsdManager;
+    private InputMethodManager imm = ;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,12 +66,18 @@ public class MovieBoxFragment extends Fragment implements LoaderManager.LoaderCa
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView movieRecyclerView = view.findViewById(R.id.moviesRecycler);
-        nsdManager = (NsdManager) getActivity().getSystemService(Context.NSD_SERVICE);
+//        nsdManager = (NsdManager) getActivity().getSystemService(Context.NSD_SERVICE);
         movieRecyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 3, GridLayoutManager.VERTICAL, false));
         movieRecyclerView.setAdapter(movieAdapter);
 
         progressBar =  view.findViewById(R.id.loadingProgress);
         searchView =  view.findViewById(R.id.searchView);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setIconified(false);
+            }
+        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -157,8 +162,9 @@ public class MovieBoxFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<MovieTile>> loader, List<MovieTile> movieTileList) {
-
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm == null){
+            imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        }
         imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
         if (loader.getId() == SEARCH_VIDEOS_LOADER && movieTileList.size() > 0)
         {

@@ -18,7 +18,6 @@ import tv.cloudwalker.cwnxt.cloudwalkercompanion.R;
 
 public class LinkedDevicesAdapter extends ListAdapter<TvInfo, LinkedDevicesAdapter.LinkedDeviceViewHolder>
 {
-
     private OnItemClickListener listener;
 
     public LinkedDevicesAdapter() {

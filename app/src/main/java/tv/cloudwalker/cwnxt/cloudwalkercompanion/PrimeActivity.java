@@ -17,6 +17,7 @@ import adapter.FragmentAdapter;
 import appUtils.PreferenceManager;
 import fragment.CwTvProfileFragment;
 import fragment.CwTvRemoteFragment;
+import fragment.MovieBoxFragment;
 import tv.cloudwalker.cwnxt.cloudwalkercompanion.databinding.ActivityPrimeBinding;
 
 public class PrimeActivity extends AppCompatActivity {
@@ -24,6 +25,8 @@ public class PrimeActivity extends AppCompatActivity {
     private ActivityPrimeBinding activityPrimeBinding;
     private static final String TAG = "PrimeActivity";
     public CwTvRemoteFragment cwTvRemoteFragment = new CwTvRemoteFragment();
+    private CwTvProfileFragment cwTvProfileFragment = new CwTvProfileFragment();
+    private MovieBoxFragment movieBoxFragment = new MovieBoxFragment();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -35,9 +38,9 @@ public class PrimeActivity extends AppCompatActivity {
                 case R.id.tv_profile:
                     activityPrimeBinding.primeViewPager.setCurrentItem(1);
                     return true;
-//                case R.id.tv_moviebox:
-//                    activityPrimeBinding.primeViewPager.setCurrentItem(2);
-//                    return true;
+                case R.id.tv_moviebox:
+                    activityPrimeBinding.primeViewPager.setCurrentItem(2);
+                    return true;
             }
             return false;
         }
@@ -82,8 +85,8 @@ public class PrimeActivity extends AppCompatActivity {
     public void setupFm(FragmentManager fragmentManager, ViewPager viewPager){
         FragmentAdapter adapter = new FragmentAdapter(fragmentManager);
         adapter.add(cwTvRemoteFragment, "Tv Remote");
-        adapter.add(new CwTvProfileFragment(), "Tv Profile");
-//        adapter.add(new MovieBoxFragment(), "Tv MovieBox");
+        adapter.add(cwTvProfileFragment, "Tv Profile");
+        adapter.add(movieBoxFragment, "Tv MovieBox");
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(0);
     }
@@ -114,9 +117,9 @@ public class PrimeActivity extends AppCompatActivity {
                 case 1:
                     activityPrimeBinding.primeBottomNavBar.setSelectedItemId(R.id.tv_profile);
                     break;
-//                case 2:
-//                    activityPrimeBinding.primeBottomNavBar.setSelectedItemId(R.id.tv_moviebox);
-//                    break;
+                case 2:
+                    activityPrimeBinding.primeBottomNavBar.setSelectedItemId(R.id.tv_moviebox);
+                    break;
             }
         }
         @Override

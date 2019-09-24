@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import adapter.CwNsdAdapter;
 import api.ServiceGenerator;
@@ -140,7 +142,12 @@ public class CwNsdListActivity extends AppCompatActivity {
                         if(response.code() == 200) {
                             Toast.makeText(getApplicationContext(), "Linking and connecting device.", Toast.LENGTH_SHORT).show();
                             socketConnection.sayHello(nsdLinkedServiceInfo.getHost().getHostAddress(), nsdLinkedServiceInfo.getPort(), "showProfile");
-                            linkedServiceAndExit(tvInfo.getEmac());
+                            new Timer().schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    linkedServiceAndExit(tvInfo.getEmac());
+                                }
+                            }, 800);
                         }else if(response.code() == 406){
                             linkedServiceAndExit(tvInfo.getEmac());
                         } else {
